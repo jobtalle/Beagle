@@ -1,0 +1,18 @@
+#wrapper {
+    border: 1px solid black;
+    width: 1100px;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#renderer {
+    float: left;
+}
+
+#controls {
+    background-color: aquamarine;
+    float: right;
+    width: 300px;
+    height: 600px;
+}
