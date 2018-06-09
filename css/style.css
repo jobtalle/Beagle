@@ -1,10 +1,27 @@
+:root {
+    --color-gui-border: #555555;
+    --color-gui-background: #dcc3a8;
+    --color-gui-table-even: #bcbcbc;
+    --color-gui-table-odd: #d9d9d9;
+    --text-margin: 4px;
+}
+
 #wrapper {
-    position: relative;
-    border: 1px solid black;
     width: 1200px;
-    height: 850px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#wrapper h1 {
+    text-align: center;
+    margin: var(--text-margin);
+}
+
+#gui {
+    border: 1px solid var(--color-gui-border);
+    position: relative;
+    width: 1200px;
+    height: 800px;
 }
 
 #renderer {
@@ -13,11 +30,19 @@
     top: 0;
 }
 
+#overlay {
+    pointer-events: none;
+    position: absolute;
+    left: 300px;
+    top: 0;
+    margin: var(--text-margin);
+}
+
 #controls {
-    background: aquamarine;
+    background: var(--color-gui-background);
     position: absolute;
     width: 300px;
-    height: 600px;
+    height: 550px;
     left: 0;
     top: 0;
 }
@@ -31,42 +56,42 @@
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    margin: 2px;
+    margin: var(--text-margin);
 }
 
-#sim-options {
+.sim-options {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 }
 
-#sim-options tr:nth-child(even) {
-    background: #bcbcbc;
+.sim-options tr:nth-child(even) {
+    background: var(--color-gui-table-even);
 }
 
-#sim-options tr:nth-child(odd) {
-    background: #d9d9d9;
+.sim-options tr:nth-child(odd) {
+    background: var(--color-gui-table-odd);
 }
 
-#sim-options td {
+.sim-options td {
     width: 50%;
 }
 
-#sim-options td:first-child {
+.sim-options td:first-child {
     text-align: right;
 }
 
-#sim-options input {
+.sim-options input {
     max-width: 100%;
     box-sizing: border-box;
 }
 
-#sim-options input[type=number] {
+.sim-options input[type=number] {
     width: 100%;
 }
 
 #inspector {
-    background: coral;
+    background: var(--color-gui-background);
     position: absolute;
     width: 100%;
     height: 250px;
