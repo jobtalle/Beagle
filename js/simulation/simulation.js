@@ -10,6 +10,8 @@ export function Simulation(environment) {
     };
 
     this.setup = config => {
+        environment.setup(config);
+
         configuration = config;
     };
 }
