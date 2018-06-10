@@ -48,6 +48,10 @@ canvas.addEventListener("mousedown", () => {
     view.onMousePress();
 });
 
+canvas.addEventListener("mouseleave", () => {
+    view.onMouseRelease();
+});
+
 canvas.addEventListener("mouseup", () => {
     view.onMouseRelease();
 });

@@ -6,6 +6,13 @@
     --text-margin: 4px;
 }
 
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 #wrapper {
     width: 1200px;
     margin-left: auto;

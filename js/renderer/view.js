@@ -1,6 +1,7 @@
 export function View(myr, width, height) {
     const ZOOM_MAX = 128;
     const ZOOM_MIN = 1;
+    const ZOOM_DEFAULT = 32;
     const ZOOM_SCALE_FACTOR = 0.25;
 
     const transform = new myr.Transform();
@@ -8,7 +9,7 @@ export function View(myr, width, height) {
     let mouseY = 0;
     let shiftX = 0;
     let shiftY = 0;
-    let zoom = 64;
+    let zoom = ZOOM_DEFAULT;
     let dragging = false;
 
     const updateTransform = () => {
