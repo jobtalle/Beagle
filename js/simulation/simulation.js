@@ -16,4 +16,8 @@ export function Simulation(view, environment) {
 
         configuration = config;
     };
+
+    this.clear = () => {
+        configuration = null;
+    };
 }

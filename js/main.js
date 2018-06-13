@@ -38,6 +38,8 @@ document.getElementById(ID_BUTTON_STEP).onclick = () => {
 
 document.getElementById(ID_BUTTON_REWIND).onclick = () => {
     setInputsDisabled(false);
+
+    simulation.clear();
 };
 
 canvas.addEventListener("mousemove", event => {
