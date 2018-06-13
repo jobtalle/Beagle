@@ -72,5 +72,12 @@ export function View(myr, width, height) {
         mouseY = y;
     };
 
+    this.setFocus = (x, y) => {
+        shiftX = -x;
+        shiftY = -y;
+
+        updateTransform();
+    };
+
     updateTransform();
 }

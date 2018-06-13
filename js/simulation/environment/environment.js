@@ -1,13 +1,24 @@
+import {Terrain} from "./terrain.js";
+
 export function Environment() {
     const SPACING = 1;
 
+    let terrain = null;
     let slots = null;
 
     this.render = myr => {
-        myr.primitives.drawLine(myr.Color.RED, 0, 0, myr.getWidth(), myr.getHeight());
+        if (terrain)
+            terrain.render(myr);
     };
 
     this.setup = config => {
-        slots = new Array(config.getPopulationSize());
+        slots = [];
+        slots.length = config.getPopulationSize();
+
+        terrain = new Terrain(SPACING * config.getPopulationSize(), config);
+    };
+
+    this.getWidth = () => {
+        return SPACING * slots.length
     };
 }

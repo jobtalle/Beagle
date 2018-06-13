@@ -10,7 +10,6 @@ export function Renderer(myr, view, simulation) {
         myr.push();
         myr.transform(view.getTransform());
 
-        myr.primitives.drawCircle(myr.Color.BLUE, 0, 0, 10);
         simulation.getEnvironment().render(myr);
 
         myr.pop();

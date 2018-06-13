@@ -16,11 +16,11 @@ const setInputsDisabled = disabled => {
             element["disabled"] = disabled;
 };
 
-const simulation = new Simulation(new Environment());
 const canvas = document.getElementById(ID_RENDERER);
 const canvasRect = canvas.getBoundingClientRect();
 const myr = new Myr(canvas);
 const view = new View(myr, canvas.width, canvas.height);
+const simulation = new Simulation(view, new Environment());
 new Renderer(myr, view, simulation);
 
 document.getElementById(ID_BUTTON_START).onclick = () => {
