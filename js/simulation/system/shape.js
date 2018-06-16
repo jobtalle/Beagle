@@ -3,8 +3,13 @@ import {Symbol} from "./symbol.js";
 export function Shape(symbols, angle) {
     const INITIAL_ANGLE = Math.PI * -0.5;
     const BRANCH_LENGTH = 0.2;
+    const PADDING = BRANCH_LENGTH;
 
     this.edges = [];
+    this.left = 0;
+    this.top = 0;
+    this.right = 0;
+    this.bottom = 0;
 
     const makeEdge = (x1, y1, x2, y2) => {
         return {
@@ -50,6 +55,16 @@ export function Shape(symbols, angle) {
                     const newX = x[x.length - 1] + Math.cos(a[a.length - 1]) * BRANCH_LENGTH;
                     const newY = y[y.length - 1] + Math.sin(a[a.length - 1]) * BRANCH_LENGTH;
 
+                    if (newX < this.left)
+                        this.left = newX;
+                    else if (newX > this.right)
+                        this.right = newX;
+
+                    if (newY < this.top)
+                        this.top = newY;
+                    else if (newY > this.bottom)
+                        this.bottom = newY;
+
                     this.edges.push(makeEdge(x[x.length - 1], y[y.length - 1], newX, newY));
 
                     x[x.length - 1] = newX;
@@ -59,6 +74,11 @@ export function Shape(symbols, angle) {
 
         if (this.edges.length > 0)
             this.edges[this.edges.length - 1].leaf = true;
+
+        this.left -= PADDING;
+        this.top -= PADDING;
+        this.right += PADDING;
+        this.bottom += PADDING;
     };
 
     build();
