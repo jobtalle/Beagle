@@ -11,7 +11,8 @@ export function Shape(symbols, angle) {
             x1: x1,
             y1: y1,
             x2: x2,
-            y2: y2
+            y2: y2,
+            leaf: false
         }
     };
 
@@ -37,6 +38,9 @@ export function Shape(symbols, angle) {
 
                     break;
                 case Symbol.BRANCH_CLOSE:
+                    if (this.edges.length > 0)
+                        this.edges[this.edges.length - 1].leaf = true;
+
                     x.pop();
                     y.pop();
                     a.pop();
@@ -52,6 +56,9 @@ export function Shape(symbols, angle) {
                     y[y.length - 1] = newY;
             }
         }
+
+        if (this.edges.length > 0)
+            this.edges[this.edges.length - 1].leaf = true;
     };
 
     build();

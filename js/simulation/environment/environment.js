@@ -28,7 +28,7 @@ export function Environment() {
     const renderInstance = (myr, sample, instance) => {
         for (const edge of instance.getShape().edges)
             myr.primitives.drawLine(
-                myr.Color.BLUE,
+                edge.leaf?myr.Color.GREEN:myr.Color.BLUE,
                 sample.getX() + edge.x1,
                 sample.getY() + edge.y1,
                 sample.getX() + edge.x2,
