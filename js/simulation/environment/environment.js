@@ -4,35 +4,35 @@ import {LSystem} from "../system/system.js";
 import {Symbol} from "../system/symbol.js";
 
 export function Environment() {
-    const INITIAL_ANGLE = Math.PI * -0.5;
-    const BRANCH_LENGTH = 0.2;
+    const INITIAL_SYMBOLS = [
+        new Symbol(Symbol.VAR_FIRST),
+        new Symbol(Symbol.BRANCH_OPEN),
+        new Symbol(Symbol.TURN_LEFT),
+        new Symbol(Symbol.VAR_FIRST),
+        new Symbol(Symbol.BRANCH_CLOSE),
+        new Symbol(Symbol.VAR_FIRST)
+    ];
+    const INITIAL_TURN_SIZE = 0.25;
     const SPACING = 1;
 
     let terrain = null;
     let instances = null;
     let samples = null;
 
-    const makeInitialInstance = () => new LInstance(new LSystem([new Symbol(0)], [], []));
+    const makeInitialInstance = () => new LInstance(new LSystem(
+        INITIAL_SYMBOLS,
+        [],
+        [],
+        INITIAL_TURN_SIZE));
 
     const renderInstance = (myr, sample, instance) => {
-        let angle = [INITIAL_ANGLE];
-        let x = [sample.getX()];
-        let y = [sample.getY()];
-
-        for (const symbol of instance.getSymbols()) {
-            const newX = x[x.length - 1] + Math.cos(angle[angle.length - 1]) * BRANCH_LENGTH;
-            const newY = y[y.length - 1] + Math.sin(angle[angle.length - 1]) * BRANCH_LENGTH;
-
+        for (const edge of instance.getShape().edges)
             myr.primitives.drawLine(
-                myr.Color.GREEN,
-                x[x.length - 1],
-                y[y.length - 1],
-                newX,
-                newY);
-
-            x[x.length - 1] = newX;
-            y[y.length - 1] = newY;
-        }
+                myr.Color.BLUE,
+                sample.getX() + edge.x1,
+                sample.getY() + edge.y1,
+                sample.getX() + edge.x2,
+                sample.getY() + edge.y2);
     };
 
     this.render = myr => {

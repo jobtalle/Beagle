@@ -1,4 +1,4 @@
-export function LSystem(axiom, rules, constants) {
+export function LSystem(axiom, rules, constants, angle) {
     this.apply = symbols => {
         if (symbols.length === 0)
             return axiom;
@@ -10,4 +10,6 @@ export function LSystem(axiom, rules, constants) {
 
         return result;
     };
+
+    this.getAngle = () => angle;
 }
