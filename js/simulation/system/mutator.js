@@ -1,12 +1,26 @@
 import {Instance} from "./instance.js";
 import {System} from "./system.js";
+import {Symbol} from "./symbol.js";
 
 export function Mutator(config) {
     const Combination = function(first, second) {
+        const indices = []; // Indices that may exist in this system
+        let highestIndex = Symbol.VAR_FIRST;
+
         this.axiom = [];
         this.rules = [];
         this.constants = [];
         this.angle = 0;
+
+        const addToLibrary = symbol => {
+            if (symbol.getIndex() < Symbol.VAR_FIRST || indices.indexOf(symbol.getIndex()) !== -1)
+                return;
+
+            indices.push(symbol.getIndex());
+
+            if (symbol.getIndex() > highestIndex)
+                highestIndex = symbol.getIndex();
+        };
 
         const crossover = () => {
             const systems = [first, second];
@@ -18,19 +32,31 @@ export function Mutator(config) {
             };
 
             for (let i = 0; i < systems[index].getAxiom().length; ++i) {
-                this.axiom.push(systems[index].getAxiom()[i]);
+                const symbol = systems[index].getAxiom()[i];
+
+                addToLibrary(symbol);
+                this.axiom.push(symbol);
 
                 cross();
             }
 
             for (let i = 0; i < systems[index].getRules().length; ++i) {
-                this.rules.push(systems[index].getRules()[i]);
+                const rule = systems[index].getRules()[i];
+
+                for (const symbol of rule.getSymbols())
+                    addToLibrary(symbol);
+
+                for (const symbol of rule.getResult())
+                    addToLibrary(symbol);
+
+                this.rules.push(rule);
 
                 cross();
             }
 
             for (let i = 0; i < systems[index].getConstants().length; ++i) {
-                this.constants.push(systems[index].getConstants()[i]);
+                if (Math.random() > config.getConstantRemovalRate())
+                    this.constants.push(systems[index].getConstants()[i]);
 
                 cross();
             }
@@ -39,7 +65,12 @@ export function Mutator(config) {
         };
 
         const mutate = () => {
+            if (Math.random() < config.getConstantizationRate()) {
+                const constant = indices[Math.floor(Math.random() * indices.length)];
 
+                if (this.constants.indexOf(constant) === -1)
+                    this.constants.push(constant);
+            }
         };
 
         crossover();
