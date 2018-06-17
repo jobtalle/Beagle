@@ -18,7 +18,6 @@ const setInputsDisabled = disabled => {
 };
 
 const canvas = document.getElementById(ID_RENDERER);
-const canvasRect = canvas.getBoundingClientRect();
 const myr = new Myr(canvas);
 const view = new View(myr, canvas.width, canvas.height);
 const simulation = new Simulation(view, new Environment(), new Inspector());
@@ -48,7 +47,9 @@ document.getElementById(ID_BUTTON_REWIND).onclick = () => {
 };
 
 canvas.addEventListener("mousemove", event => {
-    view.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+    view.onMouseMove(
+        event.clientX - canvas.getBoundingClientRect().left,
+        event.clientY - canvas.getBoundingClientRect().top);
 
     if (pressed)
         moved = true;
@@ -56,7 +57,9 @@ canvas.addEventListener("mousemove", event => {
 
 canvas.addEventListener("mousedown", event => {
     if (!selected)
-        selected = simulation.select(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+        selected = simulation.select(
+            event.clientX - canvas.getBoundingClientRect().left,
+            event.clientY - canvas.getBoundingClientRect().top);
 
     view.onMousePress();
 
@@ -72,7 +75,9 @@ canvas.addEventListener("mouseup", event => {
     view.onMouseRelease();
 
     if (!moved && selected)
-        selected = simulation.select(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+        selected = simulation.select(
+            event.clientX - canvas.getBoundingClientRect().left,
+            event.clientY - canvas.getBoundingClientRect().top);
 
     pressed = false;
 });
