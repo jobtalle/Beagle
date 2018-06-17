@@ -3,6 +3,7 @@ import {LInstance} from "../system/instance.js";
 import {LSystem} from "../system/system.js";
 import {Symbol} from "../system/symbol.js";
 import {Rule} from "../system/rule.js";
+import {Slot} from "./slot.js";
 
 export function Environment() {
     const INITIAL_SYMBOLS = [
@@ -12,8 +13,7 @@ export function Environment() {
     const SPACING = 1;
 
     let terrain = null;
-    let instances = null;
-    let samples = null;
+    let slots = null;
 
     const makeInitialInstance = () => new LInstance(new LSystem(
         INITIAL_SYMBOLS,
@@ -65,22 +65,24 @@ export function Environment() {
 
         terrain.render(myr);
 
-        for (let i = 0; i < instances.length; ++i)
-            renderInstance(myr, samples[i], instances[i]);
+        for (const slot of slots)
+            renderInstance(myr, slot.getSample(), slot.getInstance());
     };
 
     this.setup = config => {
-        instances = [];
-        samples = [];
-
         terrain = new Terrain(SPACING * config.getPopulationSize(), config);
+        slots = [];
 
-        for (let i = 0; i <= config.getPopulationSize(); ++i) {
-            instances.push(makeInitialInstance());
-            samples.push(terrain.sample(i * SPACING));
-        }
+        for (let i = 0; i <= config.getPopulationSize(); ++i)
+            slots.push(new Slot(terrain.sample(i * SPACING), makeInitialInstance()));
     };
 
-    this.getInstances = () => instances;
-    this.getWidth = () => SPACING * instances.length;
+    this.grow = lifetime => {
+        for (const slot of slots)
+            slot.getInstance().grow(lifetime);
+
+
+    };
+
+    this.getWidth = () => SPACING * slots.length;
 }

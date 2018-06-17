@@ -7,7 +7,7 @@ export function LInstance(system) {
     const apply = () => symbols = system.apply(symbols);
 
     this.getShape = () => shape;
-    this.evolve = lifetime => {
+    this.grow = lifetime => {
         for (let i = 0; i < lifetime; ++i)
             apply();
 
