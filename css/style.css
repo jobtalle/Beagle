@@ -49,9 +49,10 @@ body {
     background: var(--color-gui-background);
     position: absolute;
     width: 300px;
-    height: 550px;
+    height: 800px;
     left: 0;
     top: 0;
+    overflow-x: hidden;
 }
 
 #controls button {
@@ -100,7 +101,53 @@ body {
 #inspector {
     background: var(--color-gui-background);
     position: absolute;
-    width: 100%;
+    width: 900px;
     height: 250px;
+    left: 300px;
     bottom: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.inspector-rule-table {
+    border-collapse: collapse;
+}
+
+.inspector-rule-table td {
+    padding: 5px;
+}
+
+.inspector-rule-table td:first-child {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.inspector-rule-table td:last-child {
+    width: 100%;
+}
+
+.inspector-rule-table tr:nth-child(even) {
+    background: var(--color-gui-table-even);
+}
+
+.inspector-rule-table tr:nth-child(odd) {
+    background: var(--color-gui-table-odd);
+}
+
+.inspector-rule-table ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.inspector-rule-table table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.inspector-rule-table table td {
+    border: none;
 }

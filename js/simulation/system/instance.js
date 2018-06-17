@@ -8,6 +8,7 @@ export function Instance(system) {
 
     this.getShape = () => shape;
     this.getSystem = () => system;
+    this.getSymbols = () => symbols;
 
     this.grow = lifetime => {
         for (let i = 0; i < lifetime; ++i)

@@ -5,7 +5,6 @@ export function Simulation(view, environment, inspector) {
     let mutator = null;
 
     this.getEnvironment = () => environment;
-
     this.isConfigured = () => configuration != null;
 
     this.step = () => {
@@ -13,6 +12,7 @@ export function Simulation(view, environment, inspector) {
 
         environment.reproduce(configuration, mutator);
         environment.grow(configuration.getLifetime());
+        view.setChanged();
     };
 
     this.setup = config => {
@@ -29,11 +29,15 @@ export function Simulation(view, environment, inspector) {
     };
 
     this.select = (x, y) => {
+        if (!this.isConfigured())
+            return;
+
         const worldCoordinates = view.toWorldCoordinates(x, y);
         const selected = environment.findInstance(worldCoordinates.x, worldCoordinates.y);
 
         inspector.inspect(selected);
         environment.setSelected(selected);
+        view.setChanged();
 
         return selected !== null;
     };

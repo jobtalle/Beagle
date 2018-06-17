@@ -11,12 +11,15 @@ export function View(myr, width, height) {
     let shiftY = 0;
     let zoom = ZOOM_DEFAULT;
     let dragging = false;
+    let changed = true;
 
     const updateTransform = () => {
         transform.identity();
         transform.translate(width * 0.5, height * 0.5);
         transform.scale(zoom, zoom);
         transform.translate(shiftX, shiftY);
+
+        changed = true;
     };
 
     const move = (x, y) => {
@@ -88,6 +91,16 @@ export function View(myr, width, height) {
 
         return result;
     };
+
+    this.hasChanged = () => {
+        const wasChanged = changed;
+
+        changed = false;
+
+        return wasChanged;
+    };
+
+    this.setChanged = () => changed = true;
 
     this.getScale = () => zoom;
 

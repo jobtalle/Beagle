@@ -1,9 +1,8 @@
 export function Renderer(myr, view, simulation) {
-    const update = timeStep => {
-
-    };
-
     const render = () => {
+        if (!view.hasChanged())
+            return;
+
         myr.bind();
         myr.clear();
 
@@ -18,8 +17,7 @@ export function Renderer(myr, view, simulation) {
     };
 
     myr.setClearColor(new myr.Color(0, 0, 0, 0));
-    myr.utils.loop(timeStep => {
-        update(timeStep);
+    myr.utils.loop(() => {
         render();
 
         return true;
