@@ -65,12 +65,16 @@ export function Mutator(config) {
         };
 
         const mutate = () => {
+            // Mutate constants
             if (Math.random() < config.getConstantizationRate()) {
                 const constant = indices[Math.floor(Math.random() * indices.length)];
 
                 if (this.constants.indexOf(constant) === -1)
                     this.constants.push(constant);
             }
+
+            // Mutate angle
+            this.angle += (Math.random() - 0.5) * 2 * config.getAngleMutationRate();
         };
 
         crossover();

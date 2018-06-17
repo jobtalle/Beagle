@@ -12,6 +12,9 @@ export function Configuration() {
 
         // The chance a constant becomes activated again
         this.getConstantRemovalRate = () => 0.05;
+
+        // The mutation of the branching angle
+        this.getAngleMutationRate = () => 0.05;
     };
 
     const animate =            getValue("sim-option-animate");
