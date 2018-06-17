@@ -1,6 +1,6 @@
 export function View(myr, width, height) {
     const ZOOM_MAX = 128;
-    const ZOOM_MIN = 1;
+    const ZOOM_MIN = 8;
     const ZOOM_DEFAULT = 32;
     const ZOOM_SCALE_FACTOR = 0.25;
 

@@ -57,7 +57,6 @@ export function Environment() {
         }
     };
 
-    this.getWidth = () => {
-        return SPACING * instances.length
-    };
+    this.getInstances = () => instances;
+    this.getWidth = () => SPACING * instances.length;
 }

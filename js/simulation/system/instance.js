@@ -4,11 +4,15 @@ export function LInstance(system) {
     let symbols = [];
     let shape = null;
 
-    this.apply = () => symbols = system.apply(symbols);
-    this.getSymbols = () => symbols;
+    const apply = () => symbols = system.apply(symbols);
+
     this.getShape = () => shape;
+    this.evolve = lifetime => {
+        for (let i = 0; i < lifetime; ++i)
+            apply();
 
-    this.apply();
+        shape = new Shape(symbols, system.getAngle());
+    };
 
-    shape = new Shape(symbols, system.getAngle());
+    apply();
 }

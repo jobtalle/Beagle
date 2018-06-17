@@ -6,7 +6,8 @@ export function Simulation(view, environment) {
     this.isConfigured = () => configuration != null;
 
     this.step = () => {
-
+        for (const instance of environment.getInstances())
+            instance.evolve(configuration.getLifetime());
     };
 
     this.setup = config => {
