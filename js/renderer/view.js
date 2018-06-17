@@ -79,6 +79,16 @@ export function View(myr, width, height) {
         updateTransform();
     };
 
+    this.toWorldCoordinates = (x, y) => {
+        const inverted = transform.copy();
+        const result = new myr.Vector(x, y);
+
+        inverted.invert();
+        inverted.apply(result);
+
+        return result;
+    };
+
     this.getScale = () => zoom;
 
     updateTransform();

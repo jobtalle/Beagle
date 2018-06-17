@@ -140,5 +140,21 @@ export function Environment() {
         updated = true;
     };
 
+    this.findInstance = (x, y) => {
+        for (const slot of slots) {
+            const sample = slot.getSample();
+            const shape = slot.getInstance().getShape();
+
+            if (
+                x > sample.getX() + shape.left &&
+                x < sample.getX() + shape.right &&
+                y > sample.getY() + shape.top &&
+                y < sample.getY() + shape.bottom)
+                return slot.getInstance();
+        }
+
+        return null;
+    };
+
     this.getWidth = () => SPACING * slots.length;
 }

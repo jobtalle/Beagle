@@ -25,4 +25,11 @@ export function Simulation(view, environment) {
     this.clear = () => {
         configuration = null;
     };
+
+    this.select = (x, y) => {
+        const worldCoordinates = view.toWorldCoordinates(x, y);
+        const selected = environment.findInstance(worldCoordinates.x, worldCoordinates.y);
+
+        return selected !== null;
+    };
 }

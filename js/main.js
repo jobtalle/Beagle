@@ -46,8 +46,9 @@ canvas.addEventListener("mousemove", event => {
     view.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
-canvas.addEventListener("mousedown", () => {
-    view.onMousePress();
+canvas.addEventListener("mousedown", event => {
+    if (!simulation.select(event.clientX - canvasRect.left, event.clientY - canvasRect.top))
+        view.onMousePress();
 });
 
 canvas.addEventListener("mouseleave", () => {
