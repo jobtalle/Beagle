@@ -11,7 +11,7 @@ export function LInstance(system) {
         for (let i = 0; i < lifetime; ++i)
             apply();
 
-        shape = new Shape(symbols, system.getAngle());
+        shape = new Shape(symbols, system);
     };
 
     apply();

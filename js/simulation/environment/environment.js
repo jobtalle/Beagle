@@ -2,17 +2,13 @@ import {Terrain} from "./terrain.js";
 import {LInstance} from "../system/instance.js";
 import {LSystem} from "../system/system.js";
 import {Symbol} from "../system/symbol.js";
+import {Rule} from "../system/rule.js";
 
 export function Environment() {
     const INITIAL_SYMBOLS = [
-        new Symbol(Symbol.VAR_FIRST),
-        new Symbol(Symbol.BRANCH_OPEN),
-        new Symbol(Symbol.TURN_LEFT),
-        new Symbol(Symbol.VAR_FIRST),
-        new Symbol(Symbol.BRANCH_CLOSE),
         new Symbol(Symbol.VAR_FIRST)
     ];
-    const INITIAL_TURN_SIZE = 0.25;
+    const INITIAL_TURN_SIZE = 0.45;
     const SPACING = 1;
 
     let terrain = null;
@@ -21,7 +17,35 @@ export function Environment() {
 
     const makeInitialInstance = () => new LInstance(new LSystem(
         INITIAL_SYMBOLS,
-        [],
+        [
+            new Rule(
+                [
+                    new Symbol(Symbol.VAR_FIRST)
+                ],
+                [
+                    new Symbol(Symbol.VAR_FIRST + 1),
+                    new Symbol(Symbol.BRANCH_OPEN),
+                    new Symbol(Symbol.TURN_RIGHT),
+                    new Symbol(Symbol.VAR_FIRST),
+                    new Symbol(Symbol.BRANCH_CLOSE),
+                    new Symbol(Symbol.BRANCH_OPEN),
+                    new Symbol(Symbol.TURN_LEFT),
+                    new Symbol(Symbol.VAR_FIRST),
+                    new Symbol(Symbol.BRANCH_CLOSE),
+                    new Symbol(Symbol.VAR_FIRST + 1),
+                    new Symbol(Symbol.VAR_FIRST)
+                ]
+            ),
+            new Rule(
+                [
+                    new Symbol(Symbol.VAR_FIRST + 1)
+                ],
+                [
+                    new Symbol(Symbol.VAR_FIRST + 1),
+                    new Symbol(Symbol.VAR_FIRST + 1)
+                ]
+            )
+        ],
         [],
         INITIAL_TURN_SIZE));
 

@@ -1,8 +1,8 @@
 import {Symbol} from "./symbol.js";
 
-export function Shape(symbols, angle) {
+export function Shape(symbols, system) {
     const INITIAL_ANGLE = Math.PI * -0.5;
-    const BRANCH_LENGTH = 0.2;
+    const BRANCH_LENGTH = 0.1;
     const PADDING = BRANCH_LENGTH;
 
     this.edges = [];
@@ -29,11 +29,11 @@ export function Shape(symbols, angle) {
         for (const symbol of symbols) {
             switch (symbol.getIndex()) {
                 case Symbol.TURN_RIGHT:
-                    a[a.length - 1] -= angle;
+                    a[a.length - 1] -= system.getAngle();
 
                     break;
                 case Symbol.TURN_LEFT:
-                    a[a.length - 1] += angle;
+                    a[a.length - 1] += system.getAngle();
 
                     break;
                 case Symbol.BRANCH_OPEN:
@@ -52,6 +52,9 @@ export function Shape(symbols, angle) {
 
                     break;
                 default:
+                    if (system.isConstant(symbol))
+                        continue;
+
                     const newX = x[x.length - 1] + Math.cos(a[a.length - 1]) * BRANCH_LENGTH;
                     const newY = y[y.length - 1] + Math.sin(a[a.length - 1]) * BRANCH_LENGTH;
 
