@@ -10,7 +10,7 @@ export function Renderer(myr, view, simulation) {
         myr.push();
         myr.transform(view.getTransform());
 
-        simulation.getEnvironment().render(myr);
+        simulation.getEnvironment().render(myr, view.getScale());
 
         myr.pop();
 

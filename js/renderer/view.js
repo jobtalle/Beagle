@@ -79,5 +79,7 @@ export function View(myr, width, height) {
         updateTransform();
     };
 
+    this.getScale = () => zoom;
+
     updateTransform();
 }

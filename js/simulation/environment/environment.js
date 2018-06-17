@@ -16,6 +16,8 @@ export function Environment() {
     let rater = null;
     let terrain = null;
     let slots = null;
+    let renderScale = -1;
+    let updated = true;
 
     const makeInitialInstance = () => new Instance(new System(
         INITIAL_SYMBOLS,
@@ -61,14 +63,37 @@ export function Environment() {
                 sample.getY() + edge.y2);
     };
 
-    this.render = myr => {
+    const updateSlotGraphics = myr => {
+        if (!slots)
+            return;
+
+        for (const slot of slots)
+            slot.makeSurface(myr, renderScale);
+
+        myr.bind();
+    };
+
+    this.render = (myr, scale) => {
         if (!terrain)
             return;
 
-        terrain.render(myr);
+        if (scale !== renderScale || updated) {
+            renderScale = scale;
+            updated = false;
+
+            updateSlotGraphics(myr);
+        }
+
+        const inverseScale = 1.0 / scale;
 
         for (const slot of slots)
-            renderInstance(myr, slot.getSample(), slot.getInstance());
+            slot.getSurface().drawScaled(
+                slot.getSample().getX() + slot.getInstance().getShape().left,
+                slot.getSample().getY() + slot.getInstance().getShape().top,
+                inverseScale,
+                inverseScale);
+
+        terrain.render(myr);
     };
 
     this.setup = config => {
@@ -81,7 +106,7 @@ export function Environment() {
     };
 
     this.reproduce = (config, mutator) => {
-        const newSlots = [];
+        const newInstances = [];
 
         for (let i = 0; i < slots.length; ++i) {
             const candidates = [slots[i]];
@@ -99,17 +124,20 @@ export function Environment() {
 
             candidates.sort(Slot.compare);
 
-            newSlots.push(new Slot(slots[i].getSample(), mutator.mutate(
+            newInstances.push(mutator.mutate(
                 candidates[0].getInstance(),
-                candidates[1].getInstance())));
+                candidates[1].getInstance()));
         }
 
-        slots = newSlots;
+        for (let i = 0; i < slots.length; ++i)
+            slots[i].setInstance(newInstances[i]);
     };
 
     this.grow = lifetime => {
         for (const slot of slots)
             slot.grow(lifetime, rater);
+
+        updated = true;
     };
 
     this.getWidth = () => SPACING * slots.length;

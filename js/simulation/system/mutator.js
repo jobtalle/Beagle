@@ -4,7 +4,7 @@ import {Symbol} from "./symbol.js";
 
 export function Mutator(config) {
     const Combination = function(first, second) {
-        const indices = []; // Indices that may exist in this system
+        const indices = []; // Indices that occur in this system
         let highestIndex = Symbol.VAR_FIRST;
 
         this.axiom = [];
@@ -66,7 +66,7 @@ export function Mutator(config) {
 
         const mutate = () => {
             // Mutate constants
-            if (Math.random() < config.getConstantizationRate()) {
+            if (Math.random() < config.getConstantCreationRate()) {
                 const constant = indices[Math.floor(Math.random() * indices.length)];
 
                 if (this.constants.indexOf(constant) === -1)

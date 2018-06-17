@@ -84,5 +84,8 @@ export function Shape(symbols, system) {
         this.bottom += PADDING;
     };
 
+    this.getWidth = () => this.right - this.left;
+    this.getHeight = ()=> this.bottom - this.top;
+
     build();
 }

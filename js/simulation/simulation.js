@@ -17,7 +17,6 @@ export function Simulation(view, environment) {
         mutator = new Mutator(config.getMutationConfiguration());
 
         environment.setup(config);
-
         view.setFocus(environment.getWidth() * 0.5, -config.getHillHeight() * 0.5);
 
         configuration = config;
