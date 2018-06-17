@@ -3,6 +3,7 @@ import {Simulation} from "./simulation/simulation.js";
 import {Environment} from "./simulation/environment/environment.js";
 import {Configuration} from "./simulation/configuration.js";
 import {View} from "./renderer/view.js";
+import {Inspector} from "./simulation/inspector.js";
 
 const ID_RENDERER = "renderer";
 const ID_OPTIONS = "sim-options";
@@ -20,8 +21,12 @@ const canvas = document.getElementById(ID_RENDERER);
 const canvasRect = canvas.getBoundingClientRect();
 const myr = new Myr(canvas);
 const view = new View(myr, canvas.width, canvas.height);
-const simulation = new Simulation(view, new Environment());
+const simulation = new Simulation(view, new Environment(), new Inspector());
 new Renderer(myr, view, simulation);
+
+let pressed = false;
+let selected = false;
+let moved = false;
 
 document.getElementById(ID_BUTTON_START).onclick = () => {
     setInputsDisabled(true);
@@ -44,19 +49,32 @@ document.getElementById(ID_BUTTON_REWIND).onclick = () => {
 
 canvas.addEventListener("mousemove", event => {
     view.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+
+    if (pressed)
+        moved = true;
 });
 
 canvas.addEventListener("mousedown", event => {
-    if (!simulation.select(event.clientX - canvasRect.left, event.clientY - canvasRect.top))
-        view.onMousePress();
+    if (!selected)
+        selected = simulation.select(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+
+    view.onMousePress();
+
+    moved = false;
+    pressed = true;
 });
 
 canvas.addEventListener("mouseleave", () => {
     view.onMouseRelease();
 });
 
-canvas.addEventListener("mouseup", () => {
+canvas.addEventListener("mouseup", event => {
     view.onMouseRelease();
+
+    if (!moved && selected)
+        selected = simulation.select(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+
+    pressed = false;
 });
 
 canvas.addEventListener("mousewheel", event => {

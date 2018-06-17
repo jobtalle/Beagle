@@ -1,16 +1,23 @@
 export function Slot(sample, instance) {
     let score;
     let surface = null;
+    let selected = false;
 
     this.getSample = () => sample;
     this.getInstance = () => instance;
-    this.setInstance = newInstance => instance = newInstance;
+    this.getSelected = () => selected;
+    this.setSelected = isSelected => selected = isSelected;
     this.getScore = () => score;
     this.getSurface = () => surface;
     this.grow = (lifetime, rater) => {
         instance.grow(lifetime);
 
         score = rater.rate(instance.getShape(), sample);
+    };
+
+    this.setInstance = newInstance => {
+        instance = newInstance;
+        selected = false;
     };
 
     this.makeSurface = (myr, scale) => {
@@ -23,10 +30,8 @@ export function Slot(sample, instance) {
         surface = new myr.Surface(
             Math.ceil(scale * instance.getShape().getWidth()),
             Math.ceil(scale * instance.getShape().getHeight()));
-        surface.setClearColor(new myr.Color(0.4, 0.8, 1));
 
         surface.bind();
-        surface.clear();
 
         for (const edge of instance.getShape().edges)
             myr.primitives.drawLine(

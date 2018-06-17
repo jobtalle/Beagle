@@ -18,6 +18,7 @@ export function Environment() {
     let slots = null;
     let renderScale = -1;
     let updated = true;
+    let selected = null;
 
     const makeInitialInstance = () => new Instance(new System(
         INITIAL_SYMBOLS,
@@ -53,16 +54,6 @@ export function Environment() {
         [],
         INITIAL_TURN_SIZE));
 
-    const renderInstance = (myr, sample, instance) => {
-        for (const edge of instance.getShape().edges)
-            myr.primitives.drawLine(
-                edge.leaf?myr.Color.GREEN:myr.Color.BLUE,
-                sample.getX() + edge.x1,
-                sample.getY() + edge.y1,
-                sample.getX() + edge.x2,
-                sample.getY() + edge.y2);
-    };
-
     const updateSlotGraphics = myr => {
         if (!slots)
             return;
@@ -71,6 +62,24 @@ export function Environment() {
             slot.makeSurface(myr, renderScale);
 
         myr.bind();
+    };
+
+    const renderSlot = (myr, scale, slot) => {
+        const inverseScale = 1.0 / scale;
+
+        slot.getSurface().drawScaled(
+            slot.getSample().getX() + slot.getInstance().getShape().left,
+            slot.getSample().getY() + slot.getInstance().getShape().top,
+            inverseScale,
+            inverseScale);
+
+        if (slot.getSelected())
+            myr.primitives.drawRectangle(
+                myr.Color.RED,
+                slot.getSample().getX() + slot.getInstance().getShape().left,
+                slot.getSample().getY() + slot.getInstance().getShape().top,
+                slot.getInstance().getShape().getWidth(),
+                slot.getInstance().getShape().getHeight());
     };
 
     this.render = (myr, scale) => {
@@ -84,14 +93,8 @@ export function Environment() {
             updateSlotGraphics(myr);
         }
 
-        const inverseScale = 1.0 / scale;
-
         for (const slot of slots)
-            slot.getSurface().drawScaled(
-                slot.getSample().getX() + slot.getInstance().getShape().left,
-                slot.getSample().getY() + slot.getInstance().getShape().top,
-                inverseScale,
-                inverseScale);
+            renderSlot(myr, scale, slot);
 
         terrain.render(myr);
     };
@@ -154,6 +157,20 @@ export function Environment() {
         }
 
         return null;
+    };
+
+    this.setSelected = instance => {
+        if (instance === selected)
+            return;
+
+        for (const slot of slots) {
+            if (slot.getInstance() === selected)
+                slot.setSelected(false);
+            else if (slot.getInstance() === instance)
+                slot.setSelected(true);
+        }
+
+        selected = instance;
     };
 
     this.getWidth = () => SPACING * slots.length;

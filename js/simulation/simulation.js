@@ -1,6 +1,6 @@
 import {Mutator} from "./system/mutator.js";
 
-export function Simulation(view, environment) {
+export function Simulation(view, environment, inspector) {
     let configuration = null;
     let mutator = null;
 
@@ -9,6 +9,8 @@ export function Simulation(view, environment) {
     this.isConfigured = () => configuration != null;
 
     this.step = () => {
+        inspector.inspect(null);
+
         environment.reproduce(configuration, mutator);
         environment.grow(configuration.getLifetime());
     };
@@ -29,6 +31,9 @@ export function Simulation(view, environment) {
     this.select = (x, y) => {
         const worldCoordinates = view.toWorldCoordinates(x, y);
         const selected = environment.findInstance(worldCoordinates.x, worldCoordinates.y);
+
+        inspector.inspect(selected);
+        environment.setSelected(selected);
 
         return selected !== null;
     };
