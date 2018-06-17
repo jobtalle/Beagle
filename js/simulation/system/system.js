@@ -1,4 +1,4 @@
-export function LSystem(axiom, rules, constants, angle) {
+export function System(axiom, rules, constants, angle) {
     const makeMatch = (count, result) => {
         return {
             count: count,
@@ -41,6 +41,9 @@ export function LSystem(axiom, rules, constants, angle) {
         return result;
     };
 
+    this.getAxiom = () => axiom;
+    this.getRules = () => rules;
+    this.getConstants = () => constants;
     this.getAngle = () => angle;
     this.isConstant = symbol => constants.indexOf(symbol.getIndex()) !== -1;
 }

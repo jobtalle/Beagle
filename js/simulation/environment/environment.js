@@ -1,9 +1,10 @@
 import {Terrain} from "./terrain.js";
-import {LInstance} from "../system/instance.js";
-import {LSystem} from "../system/system.js";
+import {Instance} from "../system/instance.js";
+import {System} from "../system/system.js";
 import {Symbol} from "../system/symbol.js";
 import {Rule} from "../system/rule.js";
 import {Slot} from "./slot.js";
+import {Rater} from "./rater.js";
 
 export function Environment() {
     const INITIAL_SYMBOLS = [
@@ -12,10 +13,11 @@ export function Environment() {
     const INITIAL_TURN_SIZE = 0.45;
     const SPACING = 1;
 
+    let rater = null;
     let terrain = null;
     let slots = null;
 
-    const makeInitialInstance = () => new LInstance(new LSystem(
+    const makeInitialInstance = () => new Instance(new System(
         INITIAL_SYMBOLS,
         [
             new Rule(
@@ -70,6 +72,7 @@ export function Environment() {
     };
 
     this.setup = config => {
+        rater = new Rater(config);
         terrain = new Terrain(SPACING * config.getPopulationSize(), config);
         slots = [];
 
@@ -77,11 +80,36 @@ export function Environment() {
             slots.push(new Slot(terrain.sample(i * SPACING), makeInitialInstance()));
     };
 
+    this.reproduce = (config, mutator) => {
+        const newSlots = [];
+
+        for (let i = 0; i < slots.length; ++i) {
+            const candidates = [slots[i]];
+
+            for (let r = 0; r < config.getReproductionRadius(); ++r) {
+                if (r >= i)
+                    candidates.push(slots[i - r]);
+
+                if (i + r < slots.length)
+                    candidates.push(slots[i + r]);
+            }
+
+            if (candidates.length < 2)
+                continue;
+
+            candidates.sort(Slot.compare);
+
+            newSlots.push(new Slot(slots[i].getSample(), mutator.mutate(
+                candidates[0].getInstance(),
+                candidates[1].getInstance())));
+        }
+
+        slots = newSlots;
+    };
+
     this.grow = lifetime => {
         for (const slot of slots)
-            slot.getInstance().grow(lifetime);
-
-
+            slot.grow(lifetime, rater);
     };
 
     this.getWidth = () => SPACING * slots.length;
