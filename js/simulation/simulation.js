@@ -33,7 +33,7 @@ export function Simulation(view, environment, inspector) {
             return;
 
         const worldCoordinates = view.toWorldCoordinates(x, y);
-        const selected = environment.findInstance(worldCoordinates.x, worldCoordinates.y);
+        const selected = environment.findSlot(worldCoordinates.x, worldCoordinates.y);
 
         inspector.inspect(selected);
         environment.setSelected(selected);

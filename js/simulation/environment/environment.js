@@ -143,7 +143,7 @@ export function Environment() {
         updated = true;
     };
 
-    this.findInstance = (x, y) => {
+    this.findSlot = (x, y) => {
         for (const slot of slots) {
             const sample = slot.getSample();
             const shape = slot.getInstance().getShape();
@@ -153,24 +153,24 @@ export function Environment() {
                 x < sample.getX() + shape.right &&
                 y > sample.getY() + shape.top &&
                 y < sample.getY() + shape.bottom)
-                return slot.getInstance();
+                return slot;
         }
 
         return null;
     };
 
-    this.setSelected = instance => {
-        if (instance === selected)
+    this.setSelected = newSelected => {
+        if (newSelected === selected)
             return;
 
         for (const slot of slots) {
-            if (slot.getInstance() === selected)
+            if (slot === selected)
                 slot.setSelected(false);
-            else if (slot.getInstance() === instance)
+            else if (slot === newSelected)
                 slot.setSelected(true);
         }
 
-        selected = instance;
+        selected = newSelected;
     };
 
     this.getWidth = () => SPACING * slots.length;

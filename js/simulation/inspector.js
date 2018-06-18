@@ -9,6 +9,7 @@ export function Inspector() {
     const TITLE_ANGLE = "Angle:";
     const TITLE_RULES = "Rules:";
     const TITLE_DIMENSIONS = "Dimensions:";
+    const TITLE_SCORE = "Score:";
     const TITLE_SYMBOLS = "Symbols:";
     const ARROW = String.fromCharCode(8594);
 
@@ -49,18 +50,18 @@ export function Inspector() {
         return (angle * TO_DEGREES).toFixed(2).toString() + String.fromCharCode(176);
     };
 
-    const formatDimensions = instance => {
-        return instance.getShape().getWidth().toFixed(2).toString() + "m x " +
-            instance.getShape().getHeight().toFixed(2).toString() + "m";
+    const formatDimensions = slot => {
+        return slot.getInstance().getShape().getWidth().toFixed(2).toString() + "m x " +
+            slot.getInstance().getShape().getHeight().toFixed(2).toString() + "m";
     };
 
-    const createRuleTableAxiom = instance => {
+    const createRuleTableAxiom = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
         const symbols = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_AXIOM));
-        symbols.appendChild(document.createTextNode(symbolsToText(instance.getSystem().getAxiom())));
+        symbols.appendChild(document.createTextNode(symbolsToText(slot.getInstance().getSystem().getAxiom())));
 
         row.appendChild(title);
         row.appendChild(symbols);
@@ -68,13 +69,13 @@ export function Inspector() {
         return row;
     };
 
-    const createRuleTableConstants = instance => {
+    const createRuleTableConstants = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
         const symbols = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_CONSTANTS));
-        symbols.appendChild(document.createTextNode(indicesToText(instance.getSystem().getConstants())));
+        symbols.appendChild(document.createTextNode(indicesToText(slot.getInstance().getSystem().getConstants())));
 
         row.appendChild(title);
         row.appendChild(symbols);
@@ -82,13 +83,13 @@ export function Inspector() {
         return row;
     };
 
-    const createRuleTableAngle = instance => {
+    const createRuleTableAngle = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
         const value = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_ANGLE));
-        value.appendChild(document.createTextNode(formatAngle(instance.getSystem().getAngle())));
+        value.appendChild(document.createTextNode(formatAngle(slot.getInstance().getSystem().getAngle())));
 
         row.appendChild(title);
         row.appendChild(value);
@@ -96,10 +97,10 @@ export function Inspector() {
         return row;
     };
 
-    const createRuleTableRulesTable = instance => {
+    const createRuleTableRulesTable = slot => {
         const table = document.createElement("table");
 
-        for (const rule of instance.getSystem().getRules()) {
+        for (const rule of slot.getInstance().getSystem().getRules()) {
             const row = document.createElement("tr");
             const lhs = document.createElement("td");
             const rhs = document.createElement("td");
@@ -116,13 +117,13 @@ export function Inspector() {
         return table;
     };
 
-    const createRuleTableRules = instance => {
+    const createRuleTableRules = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
         const rules = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_RULES));
-        rules.appendChild(createRuleTableRulesTable(instance));
+        rules.appendChild(createRuleTableRulesTable(slot));
 
         row.appendChild(title);
         row.appendChild(rules);
@@ -130,13 +131,13 @@ export function Inspector() {
         return row;
     };
 
-    const createRuleTableDimensions = instance => {
+    const createRuleTableDimensions = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
         const dimensions = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_DIMENSIONS));
-        dimensions.appendChild(document.createTextNode(formatDimensions(instance)));
+        dimensions.appendChild(document.createTextNode(formatDimensions(slot)));
 
         row.appendChild(title);
         row.appendChild(dimensions);
@@ -144,13 +145,27 @@ export function Inspector() {
         return row;
     };
 
-    const createRuleTableSymbols = instance => {
+    const createRuleTableScore = slot => {
+        const row = document.createElement("tr");
+        const title = document.createElement("td");
+        const score = document.createElement("td");
+
+        title.appendChild(document.createTextNode(TITLE_SCORE));
+        score.appendChild(document.createTextNode(slot.getScore()));
+
+        row.appendChild(title);
+        row.appendChild(score);
+
+        return row;
+    };
+
+    const createRuleTableSymbols = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
         const symbols = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_SYMBOLS));
-        symbols.appendChild(document.createTextNode(symbolsToText(instance.getSymbols())));
+        symbols.appendChild(document.createTextNode(symbolsToText(slot.getInstance().getSymbols())));
 
         row.appendChild(title);
         row.appendChild(symbols);
@@ -158,32 +173,33 @@ export function Inspector() {
         return row;
     };
 
-    const createRuleTable = instance => {
+    const createRuleTable = slot => {
         const table = document.createElement("table");
 
         table.className = CLASS_RULE_TABLE;
 
-        table.appendChild(createRuleTableAxiom(instance));
-        table.appendChild(createRuleTableConstants(instance));
-        table.appendChild(createRuleTableAngle(instance));
-        table.appendChild(createRuleTableRules(instance));
-        table.appendChild(createRuleTableDimensions(instance));
-        table.appendChild(createRuleTableSymbols(instance));
+        table.appendChild(createRuleTableAxiom(slot));
+        table.appendChild(createRuleTableConstants(slot));
+        table.appendChild(createRuleTableAngle(slot));
+        table.appendChild(createRuleTableRules(slot));
+        table.appendChild(createRuleTableDimensions(slot));
+        table.appendChild(createRuleTableScore(slot));
+        table.appendChild(createRuleTableSymbols(slot));
 
         return table;
     };
 
-    const createReport = instance => {
-        element.appendChild(createRuleTable(instance));
+    const createReport = slot => {
+        element.appendChild(createRuleTable(slot));
     };
 
-    this.inspect = instance => {
+    this.inspect = slot => {
         element.innerHTML = "";
 
-        if (instance === null)
+        if (slot === null)
             return;
 
-        createReport(instance);
+        createReport(slot);
     };
 
     const element = document.getElementById(ID_INSPECTOR);
