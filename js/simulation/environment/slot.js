@@ -24,8 +24,9 @@ export function Slot(sample, instance) {
         if (surface)
             surface.free();
 
-        const colorBranch = myr.Color.BLUE;
-        const colorLeaf = myr.Color.RED;
+        const hue = Math.random();
+        const colorBranch = myr.Color.fromHSV(hue, 0.8, 0.7);
+        const colorLeaf = myr.Color.fromHSV((hue + 0.5) % 1.0, 0.8, 0.7);
 
         surface = new myr.Surface(
             Math.ceil(scale * instance.getShape().getWidth()),

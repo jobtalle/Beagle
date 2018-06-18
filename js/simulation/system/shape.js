@@ -25,6 +25,7 @@ export function Shape(symbols, system) {
         const x = [0];
         const y = [0];
         const a = [INITIAL_ANGLE];
+        let lastEdge = null;
 
         for (const symbol of symbols) {
             switch (symbol.getIndex()) {
@@ -43,8 +44,8 @@ export function Shape(symbols, system) {
 
                     break;
                 case Symbol.BRANCH_CLOSE:
-                    if (this.edges.length > 0)
-                        this.edges[this.edges.length - 1].leaf = true;
+                    if (lastEdge)
+                        lastEdge.leaf = true;
 
                     x.pop();
                     y.pop();
@@ -68,7 +69,8 @@ export function Shape(symbols, system) {
                     else if (newY > this.bottom)
                         this.bottom = newY;
 
-                    this.edges.push(makeEdge(x[x.length - 1], y[y.length - 1], newX, newY));
+                    lastEdge = makeEdge(x[x.length - 1], y[y.length - 1], newX, newY);
+                    this.edges.push(lastEdge);
 
                     x[x.length - 1] = newX;
                     y[y.length - 1] = newY;
