@@ -25,7 +25,7 @@ export function Shape(symbols, system) {
         const x = [0];
         const y = [0];
         const a = [INITIAL_ANGLE];
-        let lastEdge = null;
+        let lastEdge = [null];
 
         for (const symbol of symbols) {
             switch (symbol.getIndex()) {
@@ -38,14 +38,16 @@ export function Shape(symbols, system) {
 
                     break;
                 case Symbol.BRANCH_OPEN:
+                    lastEdge.push(null);
+
                     x.push(x[x.length - 1]);
                     y.push(y[y.length - 1]);
                     a.push(a[a.length - 1]);
 
                     break;
                 case Symbol.BRANCH_CLOSE:
-                    if (lastEdge)
-                        lastEdge.leaf = true;
+                    if (lastEdge[lastEdge.length - 1])
+                        lastEdge.pop().leaf = true;
 
                     x.pop();
                     y.pop();
@@ -69,16 +71,16 @@ export function Shape(symbols, system) {
                     else if (newY > this.bottom)
                         this.bottom = newY;
 
-                    lastEdge = makeEdge(x[x.length - 1], y[y.length - 1], newX, newY);
-                    this.edges.push(lastEdge);
+                    lastEdge[lastEdge.length - 1] = makeEdge(x[x.length - 1], y[y.length - 1], newX, newY);
+                    this.edges.push(lastEdge[lastEdge.length - 1]);
 
                     x[x.length - 1] = newX;
                     y[y.length - 1] = newY;
             }
         }
 
-        if (this.edges.length > 0)
-            this.edges[this.edges.length - 1].leaf = true;
+        if (lastEdge[lastEdge.length - 1])
+            lastEdge.pop().leaf = true;
 
         this.left -= PADDING;
         this.top -= PADDING;
