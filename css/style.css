@@ -24,6 +24,11 @@ body {
     margin: var(--text-margin);
 }
 
+#wrapper td {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
 #gui {
     border: 1px solid var(--color-gui-border);
     position: relative;
@@ -117,10 +122,6 @@ body {
     border-collapse: collapse;
 }
 
-.inspector-rule-table td {
-    padding: 5px;
-}
-
 .inspector-rule-table td:first-child {
     text-align: right;
     white-space: nowrap;
@@ -146,6 +147,7 @@ body {
 .inspector-rule-table table {
     border: 1px solid black;
     border-collapse: collapse;
+    margin: 3px;
 }
 
 .inspector-rule-table table td {

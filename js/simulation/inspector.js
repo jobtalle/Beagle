@@ -8,6 +8,7 @@ export function Inspector() {
     const TITLE_CONSTANTS = "Constants:";
     const TITLE_ANGLE = "Angle:";
     const TITLE_RULES = "Rules:";
+    const TITLE_DIMENSIONS = "Dimensions:";
     const TITLE_SYMBOLS = "Symbols:";
     const ARROW = String.fromCharCode(8594);
 
@@ -46,6 +47,11 @@ export function Inspector() {
 
     const formatAngle = angle => {
         return (angle * TO_DEGREES).toFixed(2).toString() + String.fromCharCode(176);
+    };
+
+    const formatDimensions = instance => {
+        return instance.getShape().getWidth().toFixed(2).toString() + "m x " +
+            instance.getShape().getHeight().toFixed(2).toString() + "m";
     };
 
     const createRuleTableAxiom = instance => {
@@ -124,6 +130,20 @@ export function Inspector() {
         return row;
     };
 
+    const createRuleTableDimensions = instance => {
+        const row = document.createElement("tr");
+        const title = document.createElement("td");
+        const dimensions = document.createElement("td");
+
+        title.appendChild(document.createTextNode(TITLE_DIMENSIONS));
+        dimensions.appendChild(document.createTextNode(formatDimensions(instance)));
+
+        row.appendChild(title);
+        row.appendChild(dimensions);
+
+        return row;
+    };
+
     const createRuleTableSymbols = instance => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
@@ -147,6 +167,7 @@ export function Inspector() {
         table.appendChild(createRuleTableConstants(instance));
         table.appendChild(createRuleTableAngle(instance));
         table.appendChild(createRuleTableRules(instance));
+        table.appendChild(createRuleTableDimensions(instance));
         table.appendChild(createRuleTableSymbols(instance));
 
         return table;
