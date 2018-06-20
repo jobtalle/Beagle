@@ -55,6 +55,10 @@ export function Inspector() {
             slot.getInstance().getShape().getHeight().toFixed(2).toString() + "m";
     };
 
+    const formatScore = score => {
+        return score.toFixed(4);
+    };
+
     const createRuleTableAxiom = slot => {
         const row = document.createElement("tr");
         const title = document.createElement("td");
@@ -151,7 +155,7 @@ export function Inspector() {
         const score = document.createElement("td");
 
         title.appendChild(document.createTextNode(TITLE_SCORE));
-        score.appendChild(document.createTextNode(slot.getScore()));
+        score.appendChild(document.createTextNode(formatScore(slot.getScore())));
 
         row.appendChild(title);
         row.appendChild(score);

@@ -1,6 +1,7 @@
 export function Rater(config) {
     const LEAF_PHOTO_INTERVAL = 0.1;
     const LEAF_OVERLAP_SCORE_FALLOFF = 0.8;
+    const LEAF_COUNT_BONUS = 0.1;
 
     const getDensityOverlapScore = overlap => {
         const x = LEAF_OVERLAP_SCORE_FALLOFF * (overlap - 1);
@@ -28,7 +29,10 @@ export function Rater(config) {
             ++leafCount;
         }
 
-        return score / leafCount;
+        if (leafCount === 0)
+            return 0;
+
+        return score / Math.pow(leafCount, 1 - LEAF_COUNT_BONUS);
     };
 
     this.rate = (shape, sample) => {
