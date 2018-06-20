@@ -22,11 +22,23 @@ export function Configuration() {
         // The chance of changing rule results
         this.getRuleResultMutationRate = () => 0.005;
 
+        // The chance of a rule disappearing
+        this.getRuleDisappearRate = () => 0.01;
+
+        // The chance of a rule duplicating
+        this.getRuleDuplicationRate = () => 0.003;
+
+        // The chance of creating a new rule
+        this.getRuleCreationRate = () => 0.003;
+
         // The chance a new symbol branches
         this.getNewBranchChance = () => 0.1;
 
         // The chance a new symbol is added to the system
-        this.getNewSymbolChance = () => 0.05;
+        this.getNewSymbolChance = () => 0.1;
+
+        // The chance a new symbol is a rotation
+        this.getRotationChance = () => 0.3;
     };
 
     const animate = getValue("sim-option-animate");

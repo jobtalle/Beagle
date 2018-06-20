@@ -109,7 +109,7 @@ export function Inspector() {
             const lhs = document.createElement("td");
             const rhs = document.createElement("td");
 
-            lhs.appendChild(document.createTextNode(symbolsToText(rule.getSymbols()) + " " + ARROW));
+            lhs.appendChild(document.createTextNode(symbolsToText(rule.getCondition()) + " " + ARROW));
             rhs.appendChild(document.createTextNode(symbolsToText(rule.getResult())));
 
             row.appendChild(lhs);

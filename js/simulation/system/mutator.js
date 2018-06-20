@@ -1,6 +1,7 @@
 import {Instance} from "./instance.js";
 import {System} from "./system.js";
 import {Symbol} from "./symbol.js";
+import {Rule} from "./rule.js";
 
 export function Mutator(config) {
     const Combination = function(first, second) {
@@ -43,15 +44,24 @@ export function Mutator(config) {
 
             // Combine rules
             for (let i = 0; i < systems[index].getRules().length; ++i) {
+                if (Math.random() < config.getRuleCreationRate())
+                    this.rules.push(new Rule([createSymbolVar(false)], [createSymbolVar(true)]));
+
+                if (Math.random() < config.getRuleDisappearRate())
+                    continue;
+
                 const rule = systems[index].getRules()[i];
 
-                for (const symbol of rule.getSymbols())
+                for (const symbol of rule.getCondition())
                     addToLibrary(symbol);
 
                 for (const symbol of rule.getResult())
                     addToLibrary(symbol);
 
                 this.rules.push(rule.copy());
+
+                if (Math.random() < config.getRuleDuplicationRate())
+                    this.rules.push(rule.copy());
 
                 cross();
             }
@@ -67,13 +77,25 @@ export function Mutator(config) {
             this.angle = systems[index].getAngle();
         };
 
+        const createSymbolVar = allowNew => {
+            if (allowNew && Math.random() < config.getNewSymbolChance())
+                return new Symbol(++highestIndex);
+            else
+                return new Symbol(indices[Math.floor(Math.random() * indices.length)]);
+        };
+
         const createSymbols = () => {
             let symbol;
 
-            if (Math.random() < config.getNewSymbolChance())
-                symbol = new Symbol(highestIndex++);
+            if (Math.random() < config.getRotationChance()) {
+                if (Math.random() < 0.5)
+                    symbol = new Symbol(Symbol.TURN_LEFT);
+                else
+                    symbol = new Symbol(Symbol.TURN_RIGHT);
+            }
             else
-                symbol = new Symbol(indices[Math.floor(Math.random() * indices.length)]);
+                symbol = createSymbolVar(true);
+
 
             if (Math.random() < config.getNewBranchChance())
                 return [new Symbol(Symbol.BRANCH_OPEN), symbol, new Symbol(Symbol.BRANCH_CLOSE)];
@@ -140,9 +162,9 @@ export function Mutator(config) {
             // Mutate rules
             for (const rule of this.rules) {
                 // Mutate condition
-                for(let i = 0; i < rule.getSymbols().length; ++i)
+                for(let i = 0; i < rule.getCondition().length; ++i)
                     if (Math.random() < config.getRuleConditionMutationRate())
-                        rule.setSymbols(mutateSymbols(rule.getSymbols()));
+                        rule.setCondition(mutateSymbols(rule.getCondition()));
 
                 for(let i = 0; i < rule.getResult().length; ++i)
                     if (Math.random() < config.getRuleResultMutationRate())
