@@ -37,6 +37,7 @@ document.getElementById(ID_BUTTON_STEP).onclick = () => {
     if (!simulation.isConfigured())
         simulation.setup(new Configuration());
 
+    for(let i = 0; i < 1000; ++i)
     simulation.step();
 };
 

@@ -46,8 +46,25 @@ export function Shape(symbols, system) {
 
                     break;
                 case Symbol.BRANCH_CLOSE:
-                    if (lastEdge.length === 0)
+                    /*
+                    if (lastEdge.length === 0) {
+                        for (const rule of system.getRules()) {
+                            let text = "";
+
+                            for (const s of rule.getCondition())
+                                text += "(" + s.getIndex() + ")";
+
+                            text += " => ";
+
+                            for (const s of rule.getResult())
+                                text += "(" + s.getIndex() + ")";
+
+                            console.log(text);
+                        }
+
                         console.log("Too far");
+                    }
+                    */
 
                     if (lastEdge[lastEdge.length - 1])
                         lastEdge.pop().leaf = true;

@@ -4,9 +4,12 @@ import {Symbol} from "./symbol.js";
 import {Rule} from "./rule.js";
 
 export function Mutator(config) {
+    const ANGLE_MIN = 0.1;
+    const ANGLE_MAX = 0.8;
+    const MAX_SENTENCE_LENGTH = 16;
+
     const Combination = function(first, second) {
         const indices = []; // Indices that occur in this system
-        let highestIndex = Symbol.VAR_FIRST;
 
         this.axiom = [];
         this.rules = [];
@@ -18,9 +21,6 @@ export function Mutator(config) {
                 return;
 
             indices.push(symbol.getIndex());
-
-            if (symbol.getIndex() > highestIndex)
-                highestIndex = symbol.getIndex();
         };
 
         const crossover = () => {
@@ -66,6 +66,10 @@ export function Mutator(config) {
                 cross();
             }
 
+            // Ensure at least one rule exists
+            if (systems[index].getRules().length === 0)
+                this.rules.push(new Rule([createSymbolVar(false)], [createSymbolVar(true)]));
+
             // Combine constants
             for (let i = 0; i < systems[index].getConstants().length; ++i)
                 if (Math.random() > config.getConstantRemovalRate())
@@ -77,9 +81,18 @@ export function Mutator(config) {
             this.angle = systems[index].getAngle();
         };
 
+        const getUniqueVar = () => {
+            let v = Symbol.VAR_FIRST;
+
+            while (indices.indexOf(v) === -1)
+                ++v;
+
+            return v + 1;
+        };
+
         const createSymbolVar = allowNew => {
             if (allowNew && Math.random() < config.getNewSymbolChance())
-                return new Symbol(++highestIndex);
+                return new Symbol(getUniqueVar());
             else
                 return new Symbol(indices[Math.floor(Math.random() * indices.length)]);
         };
@@ -147,6 +160,9 @@ export function Mutator(config) {
                 symbols.splice(Math.floor(Math.random() * symbols.length), 0, ...createSymbols());
             }
 
+            while (symbols.length > MAX_SENTENCE_LENGTH)
+                symbols = removePart(symbols, 0, []);
+
             return symbols;
         };
 
@@ -173,6 +189,12 @@ export function Mutator(config) {
 
             // Mutate angle
             this.angle += (Math.random() - 0.5) * 2 * config.getAngleMutationRate();
+
+            if (this.angle < ANGLE_MIN)
+                this.angle = ANGLE_MIN;
+
+            if (this.angle > ANGLE_MAX)
+                this.angle = ANGLE_MAX;
         };
 
         crossover();

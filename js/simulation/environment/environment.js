@@ -22,35 +22,7 @@ export function Environment() {
 
     const makeInitialInstance = () => new Instance(new System(
         INITIAL_SYMBOLS,
-        [
-            new Rule(
-                [
-                    new Symbol(Symbol.VAR_FIRST)
-                ],
-                [
-                    new Symbol(Symbol.VAR_FIRST + 1),
-                    new Symbol(Symbol.BRANCH_OPEN),
-                    new Symbol(Symbol.TURN_RIGHT),
-                    new Symbol(Symbol.VAR_FIRST),
-                    new Symbol(Symbol.BRANCH_CLOSE),
-                    new Symbol(Symbol.BRANCH_OPEN),
-                    new Symbol(Symbol.TURN_LEFT),
-                    new Symbol(Symbol.VAR_FIRST),
-                    new Symbol(Symbol.BRANCH_CLOSE),
-                    new Symbol(Symbol.VAR_FIRST + 1),
-                    new Symbol(Symbol.VAR_FIRST)
-                ]
-            ),
-            new Rule(
-                [
-                    new Symbol(Symbol.VAR_FIRST + 1)
-                ],
-                [
-                    new Symbol(Symbol.VAR_FIRST + 1),
-                    new Symbol(Symbol.VAR_FIRST + 1)
-                ]
-            )
-        ],
+        [],
         [],
         INITIAL_TURN_SIZE));
 

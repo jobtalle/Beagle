@@ -1,7 +1,7 @@
 export function Rater(config) {
     const LEAF_PHOTO_INTERVAL = 0.1;
     const LEAF_OVERLAP_SCORE_FALLOFF = 0.8;
-    const LEAF_COUNT_BONUS = 0.1;
+    const LEAF_COUNT_BONUS = 0.4;
 
     const getDensityOverlapScore = overlap => {
         const x = LEAF_OVERLAP_SCORE_FALLOFF * (overlap - 1);
@@ -16,15 +16,14 @@ export function Rater(config) {
         let score = 0;
         let leafCount = 0;
 
-        const fill = (x, y) => {
-            x = Math.floor(x / LEAF_PHOTO_INTERVAL);
-            y = Math.floor(y / LEAF_PHOTO_INTERVAL);
+        for (const edge of shape.edges) {
+            const x = Math.floor((edge.x2 - shape.left) / LEAF_PHOTO_INTERVAL);
+            const y = Math.floor((edge.y2 - shape.top) / LEAF_PHOTO_INTERVAL);
 
-            score += getDensityOverlapScore(++grid[x + y * width]);
-        };
-
-        for (const edge of shape.edges) if (edge.leaf) {
-            fill(edge.x2 - shape.left, edge.y2 - shape.top);
+            if (edge.leaf)
+                score += getDensityOverlapScore(++grid[x + y * width]);
+            else
+                ++grid[x + y * width];
 
             ++leafCount;
         }
@@ -35,7 +34,22 @@ export function Rater(config) {
         return score / Math.pow(leafCount, 1 - LEAF_COUNT_BONUS);
     };
 
+    const rateSize = (shape, sample) => {
+        return Math.max(0, Math.min(1, 300 * sample.getFertility() - shape.edges.length));
+    };
+
+    const rateShape = (shape) => {
+        let score = 1;
+
+        // Punish underground structures
+        for (const edge of shape.edges)
+            if (edge.y1 > 0)
+                score -= 0.05;
+
+        return score;
+    };
+
     this.rate = (shape, sample) => {
-        return rateDensity(shape);
+        return rateDensity(shape) * rateSize(shape, sample) * rateShape(shape);
     };
 }

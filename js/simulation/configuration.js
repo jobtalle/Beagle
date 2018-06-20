@@ -17,19 +17,19 @@ export function Configuration() {
         this.getAngleMutationRate = () => 0.05;
 
         // The chance of changing rule conditions
-        this.getRuleConditionMutationRate = () => 0.001;
+        this.getRuleConditionMutationRate = () => 0.005;
 
         // The chance of changing rule results
         this.getRuleResultMutationRate = () => 0.005;
 
         // The chance of a rule disappearing
-        this.getRuleDisappearRate = () => 0.01;
+        this.getRuleDisappearRate = () => 0.05;
 
         // The chance of a rule duplicating
-        this.getRuleDuplicationRate = () => 0.003;
+        this.getRuleDuplicationRate = () => 0.01;
 
         // The chance of creating a new rule
-        this.getRuleCreationRate = () => 0.003;
+        this.getRuleCreationRate = () => 0.01;
 
         // The chance a new symbol branches
         this.getNewBranchChance = () => 0.1;

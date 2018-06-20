@@ -12,7 +12,7 @@ export function System(axiom, rules, constants, angle) {
 
         const result = [];
 
-        for (let i = 0; i < symbols.length; ++i) {
+        for (let i = 0; i < symbols.length;) {
             const matches = [];
 
             ruleLoop:
@@ -27,7 +27,7 @@ export function System(axiom, rules, constants, angle) {
             }
 
             if (matches.length  === 0) {
-                result.push(symbols[i]);
+                result.push(symbols[i++]);
 
                 continue;
             }
@@ -36,6 +36,8 @@ export function System(axiom, rules, constants, angle) {
 
             for (const symbol of match.result)
                 result.push(symbol);
+
+            i += match.count;
         }
 
         return result;

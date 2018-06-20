@@ -22,7 +22,7 @@ export function Terrain(width, config) {
     };
 
     this.sample = x => {
-        return new Sample(x, -sampleHeight(x));
+        return new Sample(x, -sampleHeight(x), 1 - (sampleHeight(x) / config.getHillHeight()) * 0.6);
     };
 
     calculateHeights();
