@@ -31,15 +31,17 @@ export function Mutator(config) {
                     index = 1 - index;
             };
 
+            // Combine axiom
             for (let i = 0; i < systems[index].getAxiom().length; ++i) {
                 const symbol = systems[index].getAxiom()[i];
 
                 addToLibrary(symbol);
-                this.axiom.push(symbol);
-
-                cross();
+                this.axiom.push(symbol.copy());
             }
 
+            cross();
+
+            // Combine rules
             for (let i = 0; i < systems[index].getRules().length; ++i) {
                 const rule = systems[index].getRules()[i];
 
@@ -49,28 +51,102 @@ export function Mutator(config) {
                 for (const symbol of rule.getResult())
                     addToLibrary(symbol);
 
-                this.rules.push(rule);
+                this.rules.push(rule.copy());
 
                 cross();
             }
 
-            for (let i = 0; i < systems[index].getConstants().length; ++i) {
+            // Combine constants
+            for (let i = 0; i < systems[index].getConstants().length; ++i)
                 if (Math.random() > config.getConstantRemovalRate())
                     this.constants.push(systems[index].getConstants()[i]);
 
-                cross();
-            }
+            cross();
 
+            // Combine angle
             this.angle = systems[index].getAngle();
         };
 
+        const createSymbols = () => {
+            let symbol;
+
+            if (Math.random() < config.getNewSymbolChance())
+                symbol = new Symbol(highestIndex++);
+            else
+                symbol = new Symbol(indices[Math.floor(Math.random() * indices.length)]);
+
+            if (Math.random() < config.getNewBranchChance())
+                return [new Symbol(Symbol.BRANCH_OPEN), symbol, new Symbol(Symbol.BRANCH_CLOSE)];
+            else
+                return [symbol];
+        };
+
+        const removePart = (symbols, index, replacement) => {
+            while (symbols[index].getIndex() === Symbol.BRANCH_CLOSE)
+                --index;
+
+            if (symbols[index].getIndex() === Symbol.BRANCH_OPEN) {
+                let scope = 1;
+                let length = 0;
+
+                while (scope !== 0) {
+                    switch (symbols[index + ++length].getIndex()) {
+                        case Symbol.BRANCH_OPEN:
+                            ++scope;
+                            break;
+                        case Symbol.BRANCH_CLOSE:
+                            --scope;
+                            break;
+                    }
+                }
+
+                symbols.splice(index, length + 1);
+            }
+            else
+                symbols.splice(index, 1);
+
+            if (replacement !== undefined)
+                symbols.splice(index, 0, ...replacement);
+
+            return symbols;
+        };
+
+        const mutateSymbols = symbols => {
+            if (symbols.length > 1 && Math.random() < 0.333) {
+                // Remove
+                symbols = removePart(symbols, Math.floor(Math.random() * (symbols.length - 1)));
+            }
+            else if (symbols.length > 1 && Math.random() < 0.5) {
+                // Replace
+                symbols = removePart(symbols, Math.floor(Math.random() * (symbols.length - 1)), createSymbols());
+            }
+            else {
+                // Add
+                symbols.splice(Math.floor(Math.random() * symbols.length), 0, ...createSymbols());
+            }
+
+            return symbols;
+        };
+
         const mutate = () => {
-            // Mutate constants
+            // Add constants
             if (Math.random() < config.getConstantCreationRate()) {
                 const constant = indices[Math.floor(Math.random() * indices.length)];
 
                 if (this.constants.indexOf(constant) === -1)
                     this.constants.push(constant);
+            }
+
+            // Mutate rules
+            for (const rule of this.rules) {
+                // Mutate condition
+                for(let i = 0; i < rule.getSymbols().length; ++i)
+                    if (Math.random() < config.getRuleConditionMutationRate())
+                        rule.setSymbols(mutateSymbols(rule.getSymbols()));
+
+                for(let i = 0; i < rule.getResult().length; ++i)
+                    if (Math.random() < config.getRuleResultMutationRate())
+                        rule.setResult(mutateSymbols(rule.getResult()));
             }
 
             // Mutate angle

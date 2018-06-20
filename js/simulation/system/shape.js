@@ -46,6 +46,9 @@ export function Shape(symbols, system) {
 
                     break;
                 case Symbol.BRANCH_CLOSE:
+                    if (lastEdge.length === 0)
+                        console.log("Too far");
+
                     if (lastEdge[lastEdge.length - 1])
                         lastEdge.pop().leaf = true;
 

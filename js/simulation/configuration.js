@@ -15,6 +15,18 @@ export function Configuration() {
 
         // The mutation of the branching angle
         this.getAngleMutationRate = () => 0.05;
+
+        // The chance of changing rule conditions
+        this.getRuleConditionMutationRate = () => 0.001;
+
+        // The chance of changing rule results
+        this.getRuleResultMutationRate = () => 0.005;
+
+        // The chance a new symbol branches
+        this.getNewBranchChance = () => 0.1;
+
+        // The chance a new symbol is added to the system
+        this.getNewSymbolChance = () => 0.05;
     };
 
     const animate = getValue("sim-option-animate");

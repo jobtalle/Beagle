@@ -115,15 +115,20 @@ export function Environment() {
             const candidates = [slots[i]];
 
             for (let r = 0; r < config.getReproductionRadius(); ++r) {
-                if (r >= i)
+                if (i >= r)
                     candidates.push(slots[i - r]);
 
                 if (i + r < slots.length)
                     candidates.push(slots[i + r]);
             }
 
-            if (candidates.length < 2)
+            if (candidates.length < 2) {
+                newInstances.push(mutator.mutate(
+                    candidates[0].getInstance(),
+                    candidates[0].getInstance()));
+
                 continue;
+            }
 
             candidates.sort(Slot.compare);
 
