@@ -6,13 +6,6 @@
     --text-margin: 4px;
 }
 
-body {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
 #wrapper {
     width: 1200px;
     margin-left: auto;
@@ -112,10 +105,6 @@ body {
     bottom: 0;
     overflow-y: scroll;
     overflow-x: hidden;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
 }
 
 .inspector-rule-table {

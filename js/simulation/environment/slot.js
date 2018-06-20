@@ -44,4 +44,4 @@ export function Slot(sample, instance) {
     };
 }
 
-Slot.compare = (a, b) => a.getScore() - b.getScore();
+Slot.compare = (a, b) => b.getScore() - a.getScore();
