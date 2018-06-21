@@ -16,6 +16,9 @@ export function Configuration() {
         // The mutation of the branching angle
         this.getAngleMutationRate = () => 0.05;
 
+        // The chance of mutating an axiom
+        this.getAxiomMutationRate = () => 0.005;
+
         // The chance of changing rule conditions
         this.getRuleConditionMutationRate = () => 0.005;
 

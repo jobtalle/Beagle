@@ -20,7 +20,7 @@ export function System(axiom, rules, constants, angle) {
                 let j = 0;
 
                 for (const symbol of rule.getCondition())
-                    if (i + j < symbols.length && symbols[i + j++].getIndex() !== symbol.getIndex())
+                    if (i + j >= symbols.length || symbols[i + j++].getIndex() !== symbol.getIndex())
                         continue ruleLoop;
 
                 matches.push(makeMatch(rule.getCondition().length, rule.getResult()));

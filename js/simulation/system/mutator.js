@@ -167,6 +167,10 @@ export function Mutator(config) {
         };
 
         const mutate = () => {
+            // Axiom
+            if (Math.random() < config.getAxiomMutationRate())
+                this.axiom = mutateSymbols(this.axiom);
+
             // Add constants
             if (Math.random() < config.getConstantCreationRate()) {
                 const constant = indices[Math.floor(Math.random() * indices.length)];

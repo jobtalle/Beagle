@@ -55,7 +55,7 @@ export function Rater(config) {
         const ratio = edgeMax / edgeMin;
 
         if (ratio > 2)
-            score *= 1 - (ratio - 2) * 0.25;
+            score *= 1 - (ratio - 2) * 0.1;
 
         return score;
     };
