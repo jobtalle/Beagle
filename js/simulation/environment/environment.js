@@ -80,6 +80,12 @@ export function Environment() {
             slots.push(new Slot(terrain.sample(i * SPACING), makeInitialInstance()));
     };
 
+    const pickReproductionIndex = max => {
+        const x = Math.random();
+
+        return Math.floor(x * x * max);
+    };
+
     this.reproduce = (config, mutator) => {
         const newInstances = [];
 
@@ -104,9 +110,14 @@ export function Environment() {
 
             candidates.sort(Slot.compare);
 
+            const first = pickReproductionIndex(candidates.length);
+            let second;
+
+            while (second = pickReproductionIndex(candidates.length), second === first);
+
             newInstances.push(mutator.mutate(
-                candidates[0].getInstance(),
-                candidates[1].getInstance()));
+                candidates[first].getInstance(),
+                candidates[second].getInstance()));
         }
 
         for (let i = 0; i < slots.length; ++i)

@@ -68,6 +68,9 @@ document.getElementById(ID_BUTTON_STOP).onclick = () => {
 };
 
 document.getElementById(ID_BUTTON_REWIND).onclick = () => {
+    if (!stop)
+        return;
+
     setInputsDisabled(false);
 
     simulation.clear();
