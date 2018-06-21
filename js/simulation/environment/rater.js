@@ -46,6 +46,9 @@ export function Rater(config) {
             if (edge.y1 > 0)
                 score -= 0.05;
 
+        // Rate symmetry
+        //score *= (2 - (shape.xMean / (shape.getWidth() * 0.5)) * 0.2);
+
         return score;
     };
 

@@ -10,6 +10,8 @@ export function Shape(symbols, system) {
     this.top = 0;
     this.right = 0;
     this.bottom = 0;
+    this.xMean = 0;
+    this.yMean = 0;
 
     const makeEdge = (x1, y1, x2, y2) => {
         return {
@@ -81,6 +83,9 @@ export function Shape(symbols, system) {
                     const newX = x[x.length - 1] + Math.cos(a[a.length - 1]) * BRANCH_LENGTH;
                     const newY = y[y.length - 1] + Math.sin(a[a.length - 1]) * BRANCH_LENGTH;
 
+                    this.xMean += newX;
+                    this.yMean += newY;
+
                     if (newX < this.left)
                         this.left = newX;
                     else if (newX > this.right)
@@ -106,6 +111,8 @@ export function Shape(symbols, system) {
         this.top -= PADDING;
         this.right += PADDING;
         this.bottom += PADDING;
+        this.xMean /= this.edges.length;
+        this.yMean /= this.edges.length;
     };
 
     this.getWidth = () => this.right - this.left;

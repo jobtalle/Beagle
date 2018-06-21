@@ -3,6 +3,7 @@ import {Mutator} from "./system/mutator.js";
 export function Simulation(view, environment, inspector) {
     let configuration = null;
     let mutator = null;
+    let generation;
 
     this.getEnvironment = () => environment;
     this.isConfigured = () => configuration != null;
@@ -13,16 +14,21 @@ export function Simulation(view, environment, inspector) {
         environment.reproduce(configuration, mutator);
         environment.grow(configuration.getLifetime());
         view.setChanged();
+
+        ++generation;
     };
 
     this.setup = config => {
         mutator = new Mutator(config.getMutationConfiguration());
+        generation = 0;
 
         environment.setup(config);
         view.setFocus(environment.getWidth() * 0.5, -config.getHillHeight() * 0.5);
 
         configuration = config;
     };
+
+    this.getGeneration = () => generation;
 
     this.clear = () => {
         configuration = null;

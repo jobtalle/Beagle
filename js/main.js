@@ -4,11 +4,13 @@ import {Environment} from "./simulation/environment/environment.js";
 import {Configuration} from "./simulation/configuration.js";
 import {View} from "./renderer/view.js";
 import {Inspector} from "./simulation/inspector.js";
+import {Overlay} from "./simulation/overlay.js";
 
 const ID_RENDERER = "renderer";
 const ID_OPTIONS = "sim-options";
 const ID_BUTTON_START = "sim-start";
 const ID_BUTTON_STEP = "sim-step";
+const ID_BUTTON_STOP = "sim-stop";
 const ID_BUTTON_REWIND = "sim-rewind";
 
 const setInputsDisabled = disabled => {
@@ -21,14 +23,33 @@ const canvas = document.getElementById(ID_RENDERER);
 const myr = new Myr(canvas);
 const view = new View(myr, canvas.width, canvas.height);
 const simulation = new Simulation(view, new Environment(), new Inspector());
+const overlay = new Overlay();
 new Renderer(myr, view, simulation);
 
 let pressed = false;
 let selected = false;
 let moved = false;
+let stop = false;
 
 document.getElementById(ID_BUTTON_START).onclick = () => {
+    stop = false;
+
     setInputsDisabled(true);
+
+    if (!simulation.isConfigured())
+        simulation.setup(new Configuration());
+
+    const cycle = () => {
+        for (let i = 0; i < 100; ++i)
+            simulation.step();
+
+        overlay.update(simulation);
+
+        if (!stop)
+            setTimeout(cycle, 100);
+    };
+
+    cycle();
 };
 
 document.getElementById(ID_BUTTON_STEP).onclick = () => {
@@ -37,8 +58,13 @@ document.getElementById(ID_BUTTON_STEP).onclick = () => {
     if (!simulation.isConfigured())
         simulation.setup(new Configuration());
 
-    for(let i = 0; i < 1000; ++i)
     simulation.step();
+
+    overlay.update(simulation);
+};
+
+document.getElementById(ID_BUTTON_STOP).onclick = () => {
+    stop = true;
 };
 
 document.getElementById(ID_BUTTON_REWIND).onclick = () => {
