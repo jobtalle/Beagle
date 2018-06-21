@@ -4,6 +4,10 @@ export function Shape(symbols, system) {
     const INITIAL_ANGLE = Math.PI * -0.5;
     const BRANCH_LENGTH = 0.1;
     const PADDING = BRANCH_LENGTH;
+    const COST_EDGE = 1;
+    const COST_CONSTANT = 0.1;
+    const COST_ANGLE = 0.2;
+    const COST_BRANCH = 0.2;
 
     this.edges = [];
     this.left = 0;
@@ -12,6 +16,7 @@ export function Shape(symbols, system) {
     this.bottom = 0;
     this.xMean = 0;
     this.yMean = 0;
+    this.cost = 0;
 
     const makeEdge = (x1, y1, x2, y2) => {
         return {
@@ -33,14 +38,17 @@ export function Shape(symbols, system) {
             switch (symbol.getIndex()) {
                 case Symbol.TURN_RIGHT:
                     a[a.length - 1] -= system.getAngle();
+                    this.cost += COST_ANGLE;
 
                     break;
                 case Symbol.TURN_LEFT:
                     a[a.length - 1] += system.getAngle();
+                    this.cost += COST_ANGLE;
 
                     break;
                 case Symbol.BRANCH_OPEN:
                     lastEdge.push(null);
+                    this.cost += COST_BRANCH;
 
                     x.push(x[x.length - 1]);
                     y.push(y[y.length - 1]);
@@ -71,20 +79,26 @@ export function Shape(symbols, system) {
                     if (lastEdge[lastEdge.length - 1])
                         lastEdge.pop().leaf = true;
 
+                    this.cost += COST_BRANCH;
+
                     x.pop();
                     y.pop();
                     a.pop();
 
                     break;
                 default:
-                    if (system.isConstant(symbol))
+                    if (system.isConstant(symbol)) {
+                        this.cost += COST_CONSTANT;
+
                         continue;
+                    }
 
                     const newX = x[x.length - 1] + Math.cos(a[a.length - 1]) * BRANCH_LENGTH;
                     const newY = y[y.length - 1] + Math.sin(a[a.length - 1]) * BRANCH_LENGTH;
 
                     this.xMean += newX;
                     this.yMean += newY;
+                    this.cost += COST_EDGE;
 
                     if (newX < this.left)
                         this.left = newX;
