@@ -9,8 +9,6 @@ export function Simulation(view, environment, inspector) {
     this.isConfigured = () => configuration != null;
 
     this.step = () => {
-        inspector.inspect(null);
-
         environment.reproduce(configuration, mutator);
         environment.grow(configuration.getLifetime());
         view.setChanged();

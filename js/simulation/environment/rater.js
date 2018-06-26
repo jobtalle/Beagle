@@ -1,12 +1,16 @@
 export function Rater(config) {
-    const LEAF_PHOTO_INTERVAL = 0.15;
-    const LEAF_OVERLAP_SCORE_FALLOFF = 0.6;
+    const LEAF_PHOTO_INTERVAL = 0.1;
     const LEAF_COUNT_BONUS = 0.4;
 
     const getDensityOverlapScore = overlap => {
-        const x = LEAF_OVERLAP_SCORE_FALLOFF * (overlap - 1);
-
-        return Math.max(-x * x + 1, 0);
+        switch (overlap) {
+            case 0:
+                return 1;
+            case 1:
+                return -1;
+            default:
+                return 0;
+        }
     };
 
     const rateDensity = shape => {
@@ -21,7 +25,7 @@ export function Rater(config) {
             const y = Math.floor((edge.y2 - shape.top) / LEAF_PHOTO_INTERVAL);
 
             if (edge.leaf)
-                score += getDensityOverlapScore(++grid[x + y * width]);
+                score += getDensityOverlapScore(grid[x + y * width]++);
             else
                 ++grid[x + y * width];
 
@@ -35,7 +39,7 @@ export function Rater(config) {
     };
 
     const rateSize = (shape, sample) => {
-        return Math.max(0, Math.min(1, 300 * sample.getFertility() - shape.cost));
+        return Math.max(0, Math.min(1, 200 * sample.getFertility() - shape.cost));
     };
 
     const rateShape = (shape) => {
@@ -55,7 +59,7 @@ export function Rater(config) {
         const ratio = edgeMax / edgeMin;
 
         if (ratio > 2)
-            score *= 1 - (ratio - 2) * 0.1;
+            score *= 1 - (ratio - 2) * 0.05;
 
         return score;
     };

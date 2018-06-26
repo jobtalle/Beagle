@@ -36,11 +36,13 @@ document.getElementById(ID_BUTTON_START).onclick = () => {
 
     setInputsDisabled(true);
 
+    const config = new Configuration();
+
     if (!simulation.isConfigured())
-        simulation.setup(new Configuration());
+        simulation.setup(config);
 
     const cycle = () => {
-        for (let i = 0; i < 100; ++i)
+        for (let i = 0; i < config.getStepSize(); ++i)
             simulation.step();
 
         overlay.update(simulation);

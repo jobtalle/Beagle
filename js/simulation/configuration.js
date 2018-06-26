@@ -3,33 +3,41 @@ export function Configuration() {
 
     const MutationConfiguration = function() {
         const crossoverRate = getValue("sim-option-crossover-rate");
+        const constantCreationRate = getValue("sim-option-constant-creation");
+        const constantRemovalRate = getValue("sim-option-constant-removal");
+        const angleMutation = getValue("sim-option-angle-mutation");
+        const axiomMutation = getValue("sim-option-axiom-mutation");
+        const conditionMutation = getValue("sim-option-rule-condition-mutation");
+        const resultMutation = getValue("sim-option-rule-result-mutation");
+        const ruleDisappearance = getValue("sim-option-rule-disappearance-rate");
+        const ruleDuplication = getValue("sim-option-rule-duplication-rate");
 
         // The chance of crossing over when combining system atoms
         this.getCrossoverRate = () => crossoverRate;
 
         // The chance a symbol is added to the constants
-        this.getConstantCreationRate = () => 0.05;
+        this.getConstantCreationRate = () => constantCreationRate;
 
         // The chance a constant becomes activated again
-        this.getConstantRemovalRate = () => 0.05;
+        this.getConstantRemovalRate = () => constantRemovalRate;
 
         // The mutation of the branching angle
-        this.getAngleMutationRate = () => 0.05;
+        this.getAngleMutationRate = () => angleMutation;
 
         // The chance of mutating an axiom
-        this.getAxiomMutationRate = () => 0.005;
+        this.getAxiomMutationRate = () => axiomMutation;
 
         // The chance of changing rule conditions
-        this.getRuleConditionMutationRate = () => 0.005;
+        this.getRuleConditionMutationRate = () => conditionMutation;
 
         // The chance of changing rule results
-        this.getRuleResultMutationRate = () => 0.005;
+        this.getRuleResultMutationRate = () => resultMutation;
 
         // The chance of a rule disappearing
-        this.getRuleDisappearRate = () => 0.05;
+        this.getRuleDisappearRate = () => ruleDisappearance;
 
         // The chance of a rule duplicating
-        this.getRuleDuplicationRate = () => 0.01;
+        this.getRuleDuplicationRate = () => ruleDuplication;
 
         // The chance of creating a new rule
         this.getRuleCreationRate = () => 0.01;
@@ -44,9 +52,9 @@ export function Configuration() {
         this.getRotationChance = () => 0.3;
     };
 
-    const animate = getValue("sim-option-animate");
     const populationSize = getValue("sim-option-population-size");
     const lifetime = getValue("sim-option-lifetime");
+    const stepSize = getValue("sim-option-step-size");
 
     const hills = getValue("sim-option-hills");
     const hillHeight = getValue("sim-option-hill-height");
@@ -54,13 +62,14 @@ export function Configuration() {
 
     const mutationConfiguration = new MutationConfiguration();
 
-    this.isAnimated = () => animate;
-
     // Number of instances
     this.getPopulationSize = () => populationSize;
 
     // Number of growth iterations
     this.getLifetime = () => lifetime;
+
+    // Generations per simulation step
+    this.getStepSize = () => stepSize;
 
     // Number of hills
     this.getHills = () => hills;

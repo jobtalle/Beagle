@@ -2,7 +2,6 @@ import {Terrain} from "./terrain.js";
 import {Instance} from "../system/instance.js";
 import {System} from "../system/system.js";
 import {Symbol} from "../system/symbol.js";
-import {Rule} from "../system/rule.js";
 import {Slot} from "./slot.js";
 import {Rater} from "./rater.js";
 

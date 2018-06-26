@@ -5,7 +5,7 @@ import {Rule} from "./rule.js";
 
 export function Mutator(config) {
     const ANGLE_MIN = 0.1;
-    const ANGLE_MAX = 0.8;
+    const ANGLE_MAX = 0.6;
     const MAX_SENTENCE_LENGTH = 16;
 
     const Combination = function(first, second) {
@@ -147,7 +147,7 @@ export function Mutator(config) {
         };
 
         const mutateSymbols = symbols => {
-            if (symbols.length > 1 && Math.random() < 0.333) {
+            if (symbols.length > 1 && Math.random() < 0.3) {
                 // Remove
                 symbols = removePart(symbols, Math.floor(Math.random() * (symbols.length - 1)));
             }

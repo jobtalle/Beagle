@@ -24,7 +24,8 @@ export function Shape(symbols, system) {
             y1: y1,
             x2: x2,
             y2: y2,
-            leaf: false
+            leaf: false,
+            branches: false
         }
     };
 
@@ -47,6 +48,9 @@ export function Shape(symbols, system) {
 
                     break;
                 case Symbol.BRANCH_OPEN:
+                    if (lastEdge[lastEdge.length - 1])
+                        lastEdge[lastEdge.length - 1].branches = true;
+
                     lastEdge.push(null);
                     this.cost += COST_BRANCH;
 
@@ -56,28 +60,12 @@ export function Shape(symbols, system) {
 
                     break;
                 case Symbol.BRANCH_CLOSE:
-                    /*
-                    if (lastEdge.length === 0) {
-                        for (const rule of system.getRules()) {
-                            let text = "";
+                    if (lastEdge[lastEdge.length - 1]) {
+                        const edge = lastEdge.pop();
 
-                            for (const s of rule.getCondition())
-                                text += "(" + s.getIndex() + ")";
-
-                            text += " => ";
-
-                            for (const s of rule.getResult())
-                                text += "(" + s.getIndex() + ")";
-
-                            console.log(text);
-                        }
-
-                        console.log("Too far");
+                        if (!edge.branches)
+                            edge.leaf = true;
                     }
-                    */
-
-                    if (lastEdge[lastEdge.length - 1])
-                        lastEdge.pop().leaf = true;
 
                     this.cost += COST_BRANCH;
 
