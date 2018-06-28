@@ -2,17 +2,6 @@ export function Rater(config) {
     const LEAF_PHOTO_INTERVAL = 0.1;
     const LEAF_COUNT_BONUS = 0.4;
 
-    const getDensityOverlapScore = overlap => {
-        switch (overlap) {
-            case 0:
-                return 1;
-            case 1:
-                return -1;
-            default:
-                return 0;
-        }
-    };
-
     const rateDensity = shape => {
         const width = Math.ceil(shape.getWidth() / LEAF_PHOTO_INTERVAL);
         const height = Math.ceil(shape.getHeight() / LEAF_PHOTO_INTERVAL);
@@ -23,13 +12,21 @@ export function Rater(config) {
         for (const edge of shape.edges) {
             const x = Math.floor((edge.x2 - shape.left) / LEAF_PHOTO_INTERVAL);
             const y = Math.floor((edge.y2 - shape.top) / LEAF_PHOTO_INTERVAL);
+            const currentScore = grid[x + y * width];
 
             if (edge.leaf)
-                score += getDensityOverlapScore(grid[x + y * width]++);
-            else
-                ++grid[x + y * width];
+                ++leafCount;
 
-            ++leafCount;
+            if (!edge.leaf) {
+                if (currentScore === 1)
+                    --score;
+
+                grid[x + y * width] = -1;
+            }
+            else if (currentScore === 0) {
+                grid[x + y * width] = 1;
+                ++score;
+            }
         }
 
         if (leafCount === 0)
