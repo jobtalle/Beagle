@@ -10,6 +10,9 @@ export function System(axiom, rules, constants, angle) {
         if (symbols.length === 0)
             return axiom;
 
+        if (symbols.length > System.MAX_SYMBOLS)
+            return symbols;
+
         const result = [];
 
         for (let i = 0; i < symbols.length;) {
@@ -37,6 +40,9 @@ export function System(axiom, rules, constants, angle) {
             for (const symbol of match.result)
                 result.push(symbol);
 
+            if (result.length > System.MAX_SYMBOLS)
+                return symbols;
+
             i += match.count;
         }
 
@@ -49,3 +55,5 @@ export function System(axiom, rules, constants, angle) {
     this.getAngle = () => angle;
     this.isConstant = symbol => constants.indexOf(symbol.getIndex()) !== -1;
 }
+
+System.MAX_SYMBOLS = 4000;

@@ -45,4 +45,4 @@ export function Slot(sample, instance) {
 }
 
 Slot.compare = (a, b) => b.getScore() - a.getScore();
-Slot.MAX_SIZE = 512;
+Slot.MAX_SIZE = 800;

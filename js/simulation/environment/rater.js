@@ -48,7 +48,7 @@ export function Rater(config) {
                 score -= 0.05;
 
         // Rate symmetry
-        //score *= (2 - (shape.xMean / (shape.getWidth() * 0.5)) * 0.2);
+        score *= 1 / (1 + Math.abs(shape.xMean) * 0.1);
 
         // Rate ratio
         const edgeMin = Math.min(shape.getWidth(), shape.getHeight());

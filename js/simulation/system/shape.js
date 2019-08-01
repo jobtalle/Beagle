@@ -113,8 +113,11 @@ export function Shape(symbols, system) {
         this.top -= PADDING;
         this.right += PADDING;
         this.bottom += PADDING;
-        this.xMean /= this.edges.length;
-        this.yMean /= this.edges.length;
+
+        if (this.edges.length) {
+            this.xMean /= this.edges.length;
+            this.yMean /= this.edges.length;
+        }
     };
 
     this.getWidth = () => this.right - this.left;
