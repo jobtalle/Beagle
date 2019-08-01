@@ -46,7 +46,7 @@ export function Environment() {
 
         if (slot.getSelected())
             myr.primitives.drawRectangle(
-                myr.Color.RED,
+                Myr.Color.RED,
                 slot.getSample().getX() + slot.getInstance().getShape().left,
                 slot.getSample().getY() + slot.getInstance().getShape().top,
                 slot.getInstance().getShape().getWidth(),

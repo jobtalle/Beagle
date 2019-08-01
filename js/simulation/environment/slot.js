@@ -25,12 +25,12 @@ export function Slot(sample, instance) {
             surface.free();
 
         const hue = Math.random();
-        const colorBranch = myr.Color.fromHSV(hue, 0.8, 0.7);
-        const colorLeaf = myr.Color.fromHSV((hue + 0.5) % 1.0, 0.8, 0.7);
+        const colorBranch = Myr.Color.fromHSV(hue, 0.8, 0.7);
+        const colorLeaf = Myr.Color.fromHSV((hue + 0.5) % 1.0, 0.8, 0.7);
+        const width = Math.min(Slot.MAX_SIZE, Math.max(1, Math.ceil(scale * instance.getShape().getWidth())));
+        const height = Math.min(Slot.MAX_SIZE, Math.max(1, Math.ceil(scale * instance.getShape().getHeight())));
 
-        surface = new myr.Surface(
-            Math.ceil(scale * instance.getShape().getWidth()),
-            Math.ceil(scale * instance.getShape().getHeight()));
+        surface = new myr.Surface(width, height);
 
         surface.bind();
 
@@ -45,3 +45,4 @@ export function Slot(sample, instance) {
 }
 
 Slot.compare = (a, b) => b.getScore() - a.getScore();
+Slot.MAX_SIZE = 512;

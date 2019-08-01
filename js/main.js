@@ -20,7 +20,7 @@ const setInputsDisabled = disabled => {
 };
 
 const canvas = document.getElementById(ID_RENDERER);
-const myr = new Myr(canvas);
+const myr = new Myr(canvas, false);
 const view = new View(myr, canvas.width, canvas.height);
 const simulation = new Simulation(view, new Environment(), new Inspector());
 const overlay = new Overlay();

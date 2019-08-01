@@ -4,7 +4,7 @@ export function View(myr, width, height) {
     const ZOOM_DEFAULT = 32;
     const ZOOM_SCALE_FACTOR = 0.25;
 
-    const transform = new myr.Transform();
+    const transform = new Myr.Transform();
     let mouseX = 0;
     let mouseY = 0;
     let shiftX = 0;
@@ -84,7 +84,7 @@ export function View(myr, width, height) {
 
     this.toWorldCoordinates = (x, y) => {
         const inverted = transform.copy();
-        const result = new myr.Vector(x, y);
+        const result = new Myr.Vector(x, y);
 
         inverted.invert();
         inverted.apply(result);

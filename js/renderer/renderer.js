@@ -16,10 +16,12 @@ export function Renderer(myr, view, simulation) {
         myr.flush();
     };
 
-    myr.setClearColor(new myr.Color(0, 0, 0, 0));
+    myr.setClearColor(Renderer.CLEAR_COLOR);
     myr.utils.loop(() => {
         render();
 
         return true;
     });
 }
+
+Renderer.CLEAR_COLOR = Myr.Color.WHITE;

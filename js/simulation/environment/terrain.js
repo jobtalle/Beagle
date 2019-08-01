@@ -18,7 +18,7 @@ export function Terrain(width, config) {
 
     this.render = myr => {
         for (let i = 0; i < heights.length - 1; ++i)
-            myr.primitives.drawLine(myr.Color.RED, i * RESOLUTION, -heights[i], (i + 1) * RESOLUTION, -heights[i + 1]);
+            myr.primitives.drawLine(Myr.Color.RED, i * RESOLUTION, -heights[i], (i + 1) * RESOLUTION, -heights[i + 1]);
     };
 
     this.sample = x => {
