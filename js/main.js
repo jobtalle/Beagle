@@ -79,11 +79,9 @@ document.getElementById(ID_BUTTON_REWIND).onclick = () => {
 };
 
 canvas.addEventListener("mousemove", event => {
-    view.onMouseMove(
+    if(view.onMouseMove(
         event.clientX - canvas.getBoundingClientRect().left,
-        event.clientY - canvas.getBoundingClientRect().top);
-
-    if (pressed)
+        event.clientY - canvas.getBoundingClientRect().top) && pressed)
         moved = true;
 });
 
@@ -106,10 +104,11 @@ canvas.addEventListener("mouseleave", () => {
 canvas.addEventListener("mouseup", event => {
     view.onMouseRelease();
 
-    if (!moved && selected)
+    if (!moved && selected) {
         selected = simulation.select(
             event.clientX - canvas.getBoundingClientRect().left,
             event.clientY - canvas.getBoundingClientRect().top);
+    }
 
     pressed = false;
 });

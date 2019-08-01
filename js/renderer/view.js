@@ -63,16 +63,23 @@ export function View(myr, width, height) {
     };
 
     this.onMouseMove = (x, y) => {
+        let moved = false;
+
         if (dragging) {
             const dx = (mouseX - x) / zoom;
             const dy = (mouseY - y) / zoom;
 
-            if (dx !== 0 || dy !== 0)
+            if (dx !== 0 || dy !== 0) {
                 move(dx, dy);
+
+                moved = true;
+            }
         }
 
         mouseX = x;
         mouseY = y;
+
+        return moved;
     };
 
     this.setFocus = (x, y) => {
