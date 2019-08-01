@@ -48,7 +48,7 @@ export function Rater(config) {
                 score -= 0.05;
 
         // Rate symmetry
-        score *= 1 / (1 + Math.abs(shape.xMean) * 0.1);
+        score *= 1 / (1 + Math.abs(shape.xMean) * 0.02);
 
         // Rate ratio
         const edgeMin = Math.min(shape.getWidth(), shape.getHeight());
@@ -58,7 +58,7 @@ export function Rater(config) {
         if (ratio > 2)
             score *= 1 - (ratio - 2) * 0.05;
 
-        return score;
+        return score * (0.9 + Math.random() * 0.2);
     };
 
     this.rate = (shape, sample) => {
